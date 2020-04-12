@@ -26,6 +26,17 @@ log_file = None
 logger = Logger()
 dry_run = False
 
+def try_popen(cmd, where):
+	
+	print("in try_popen")
+	popen = subprocess.Popen(cmd, cwd=where, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+	for stdout_line in iter(popen.stdout.readline, ""):
+		yield stdout_line
+	popen.stdout.close()
+	return_code = popen.wait()
+	if return_code:
+		raise subprocess.CalledProcessError(return_code, cmd)
+
 # dies on error
 # runs a command in array form ["cmd", "arg1", "arg2" ....]
 def exec_cmd(cmd, where):

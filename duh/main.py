@@ -18,7 +18,7 @@ from .http_parser import HttpParser
 from .uri_parser import UriParser
 from .cxxurl import CxxUrl
 from .catch2 import Catch2
-from .util import set_log_file
+import duh.util as util 
 
 pp = pprint.PrettyPrinter(indent=4)
 
@@ -118,6 +118,13 @@ def validate_and_construct_names(args):
     defaults.external_dir = os.path.join(defaults.source_dir, 'external')
     return defaults
 
+def create_clean_install_dirs(defaults):
+    util.clear_directory(defaults.clone_dir)
+    util.clear_directory(defaults.stage_dir)
+    util.clear_directory(os.path.join(defaults.vendor_dir, "include"))
+    util.clear_directory(os.path.join(defaults.vendor_dir, "lib"))
+    util.clear_directory(os.path.join(defaults.vendor_dir, "ssl"))
+
 
 def action(name, version, defaults):
     print("installing: %s %s " % (name, version))
@@ -188,12 +195,12 @@ def main():
         else:
             action_log_path = args.log_path
 
-        set_log_file(action_log_path)
+        util.set_log_file(action_log_path)
 
     m = merge_objects(config, args)
     dependencies = m.dependencies
     defaults = validate_and_construct_names(m)
-    
+    create_clean_install_dirs(defaults)
     pp.pprint(defaults)
     pp.pprint(dependencies)
     for d in dependencies:

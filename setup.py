@@ -28,7 +28,7 @@ long_description = long_desc()
 
 version = re.search(
     '^__version__\s*=\s*"(.*)"',
-    open('pyargs/main.py').read(),
+    open('duh/main.py').read(),
     re.M
     ).group(1)
 
@@ -36,13 +36,13 @@ version = re.search(
 
 
 setup(
-    name = "pyargs",
-    packages = ["pyargs"],
+    name = "duh",
+    packages = ["duh"],
     entry_points = {
-        "console_scripts": ['pyargs = pyargs.main:main']
+        "console_scripts": ['duh = duh.main:main']
         },
     version = version,
-    description = "A python script to run commands in parallel (think xargs and GNU parallel) without intermixing the output.",
+    description = "A python script to install c++ pacgaes for a c++ project. Personal tool only.",
     long_description = long_description,
     
     classifiers=[
@@ -53,13 +53,13 @@ setup(
         'Topic :: System :: Systems Administration',
         'Topic :: Utilities'      ],
 
-    keywords='xargs, parallel, cli',
+    keywords='C++, package install',
 
-    test_suite="tests.test_pyargs",
+    test_suite="tests.test_duh",
 
     author = "Robert Blackwell",
     author_email = "rob@whiteacorn.com",
-    url = "http://github.com/robertoblackwell/pyargs.git",
+    url = "http://github.com/robertoblackwell/duh.git",
     license ='MIT',
     zip_safe = False
     )

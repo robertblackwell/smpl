@@ -4,12 +4,22 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+
         {
             "name": "Python runner.py",
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/runner.py",
             "cwd":"${workspaceFolder}/project_pig",
+            "args":["--config-file", "${workspaceFolder}/project_pig/duh.json", "--log-actions"],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "run file",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "cwd":"${workspaceFolder}/test",
             "args":["--config-file", "${workspaceFolder}/project_pig/duh.json", "--log-actions"],
             "console": "integratedTerminal"
         }

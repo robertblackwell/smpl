@@ -8,11 +8,10 @@ import shutil
 import duh.util as util 
 from .package import HeadersOnlyPackage
 
-package_name = "catch"
 
 catch_release="v2.11.1"
 package_description="catch_v2.11.1"
-package_name="catch2"
+package_name="Catch2"
 
 package_clone_stem="Catch2"
 git_clone="git clone https://github.com/catchorg/Catch2.git --branch ${catch_release}"
@@ -43,8 +42,8 @@ class Catch2(HeadersOnlyPackage):
 	
 	def stage_package(self):
 		super().stage_package_before()
-		util.rm_directory("{}".format(self.package_stage_include_dir_path))
-		util.mkdir_p("{}".format(self.package_stage_include_dir_path))
+		util.rm_directory(self.package_stage_include_dir_path)
+		util.mkdir_p(self.package_stage_include_dir_path)
 
 		util.cp_directory_contents(self.single_include_dir, self.package_stage_include_dir_path)
 

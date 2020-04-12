@@ -19,7 +19,7 @@ class UriParser(SourcePackage):
 		self.git_url = "git@github.com:robertblackwell/urlparser.git"
 		self.package_clone_dir_path = os.path.join(self.defaults.clone_dir, "urlparser")
 		self.package_clone_dir_source_path = os.path.join(self.package_clone_dir_path, "urlparser")
-		self.package_stage_source_path = os.path.join(self.package_stage_external_src_dir_path, "uri_parser")
+		self.package_stage_source_path = os.path.join(self.package_stage_external_src_dir_path, "urlparser")
 	def get_package(self):
 		super().get_package_before()
 		util.rm_directory(self.package_clone_dir_path)

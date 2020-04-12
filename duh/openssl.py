@@ -29,8 +29,6 @@ class OpenSSL(LibraryPackage):
 		self.package_clone_dir_versioned_path = os.path.join(self.defaults.clone_dir, "openssl-1.1.1f")
 
 	def get_package(self):
-		return
-		print("here")
 		super().get_package_before()
 		util.rm_file(self.package_targz_file_path)
 		util.rm_directory(self.package_clone_dir_path)
@@ -47,8 +45,6 @@ class OpenSSL(LibraryPackage):
 		super().get_package_after()
 	
 	def stage_package(self):
-		return
-		super().stage_package_before()
 		util.clear_directory(self.package_stage_include_dir_path)
 		util.rm_file("{}/libcrypto.a".format(self.stage_lib_dir_path))
 		util.rm_file("{}/libssl.a".format(self.stage_lib_dir_path))

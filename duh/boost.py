@@ -26,8 +26,6 @@ class Boost(LibraryPackage):
 		self.clone_dir_path = os.path.join(self.defaults.clone_dir, package_name + "_1_72_0")
 
 	def get_package(self):
-		return
-		print("here")
 		util.logger.writeln("Boost get_package begin")
 		super().get_package_before()
 
@@ -52,7 +50,6 @@ class Boost(LibraryPackage):
 		util.logger.writeln("Boost get_package end")
 
 	def stage_package(self):
-		return
 		util.logger.writeln("Boost stage_package begin")
 		super().stage_package_before()
 		util.mkdir_p(self.stage_include_dir_path)
