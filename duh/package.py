@@ -4,7 +4,7 @@ import datetime
 import pprint
 import os
 
-from .util import run
+import duh.util as util 
 
 class PackageBase(object):
 	def __init__(self, package_name, the_defaults):
@@ -51,23 +51,24 @@ class SourcePackage(PackageBase):
 		self.package_external_src_dir_path = os.path.join(self.defaults.source_dir, "external_src", self.package_name)
 
 	def get_package_before(self):
-		run("rm -rfv {}/{}/*".format(self.defaults.clone_dir, self.package_name))
+		# util.clrun("rm -rfv {}/{}/*".format(self.defaults.clone_dir, self.package_name))
 		pass
 	
 	def get_package_after(self):
-		run("ls -al {}".format(self.package_clone_dir_path))
-	
+		# run("ls -al {}".format(self.package_clone_dir_path))
+		pass
+
 	def stage_package_before(self):
-		run("mkdir -p {}".format(self.package_stage_external_src_dir_path))
-		run("rm -rf {}/*".format(self.package_stage_external_src_dir_path))
+		# run("mkdir -p {}".format(self.package_stage_external_src_dir_path))
+		# run("rm -rf {}/*".format(self.package_stage_external_src_dir_path))
 		pass
 
 	def stage_package_after(self):
 		pass
 
 	def install_package_before(self):
-		run("mkdir -p {}".format(self.package_external_src_dir_path))
-		run("rm -rf {}/*".format(self.package_external_src_dir_path))
+		# run("mkdir -p {}".format(self.package_external_src_dir_path))
+		# run("rm -rf {}/*".format(self.package_external_src_dir_path))
 		pass
 
 	def install_package_after(self):
@@ -76,14 +77,14 @@ class SourcePackage(PackageBase):
 class HeadersOnlyPackage(PackageBase):
 	def __init__(self, package_name, the_defaults):
 		super().__init__(package_name, the_defaults)
-		print("SourcePackage")
+		print("HeaderOnlyPackage")
 
 	def get_package_before(self):
-		run("rm -rfv {}/{}/*".format(self.defaults.clone_dir, self.package_name))
+		# util.rm_directory("{}/{}/*".format(self.defaults.clone_dir, self.package_name))
 		pass
 	
 	def get_package_after(self):
-		run("ls -al {}".format(self.package_clone_dir_path))
+		util.list_directory(self.package_clone_dir_path)
 	
 	def stage_package_before(self):
 		pass

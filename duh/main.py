@@ -13,7 +13,7 @@ from types import SimpleNamespace as Namespace
 from .boost import Boost
 from .openssl import OpenSSL
 from .simple_buffer import SimpleBuffer
-from .rb_logger import RBLogger
+from .trog import Trog
 from .http_parser import HttpParser
 from .uri_parser import UriParser
 from .cxxurl import CxxUrl
@@ -23,10 +23,10 @@ from .util import set_log_file
 pp = pprint.PrettyPrinter(indent=4)
 
 project_name = "marvin++"
-project_dir = os.getcwd()
-source_dir = os.path.join(project_dir, "marvin")
-clone_dir = os.path.join(project_dir, "scripts", "clone")
-stage_dir = os.path.join(project_dir, "scripts", "stage")
+# project_dir = os.getcwd()
+# source_dir = os.path.join(project_dir, "marvin")
+# clone_dir = os.path.join(project_dir, "scripts", "clone")
+# stage_dir = os.path.join(project_dir, "scripts", "stage")
 
 __version__ = "0.3.5"
 
@@ -75,10 +75,10 @@ class Defaults:
         self.external_name = "external"
         self.vendor_name = "vendor"
         self.scripts_name = "scripts"
-        self.unpack_dir = os.path.join(project_dir, self.scripts_name, self.clone_name)
-        self.source_dir = os.path.join(project_dir, the_project_name)
-        self.external_dir = os.path.join(project_dir, the_project_name, self.external_name)
-        self.vendor_dir = os.path.join(project_dir, self.vendor_name)
+        self.unpack_dir = os.path.join(the_project_dir, self.scripts_name, self.clone_name)
+        self.source_dir = os.path.join(the_project_dir, the_project_name)
+        self.external_dir = os.path.join(the_project_dir, the_project_name, self.external_name)
+        self.vendor_dir = os.path.join(the_project_dir, self.vendor_name)
 
 
 def validate_and_construct_names(args):
@@ -127,8 +127,8 @@ def action(name, version, defaults):
         handler = OpenSSL(name, version, defaults)
     elif name == "simple_buffer":
         handler = SimpleBuffer(name, version, defaults)
-    elif name == "rb_logger":
-        handler = RBLogger(name, version, defaults)
+    elif name == "trog":
+        handler = Trog(name, version, defaults)
     elif name == "http_parser":
         handler = HttpParser(name, version, defaults)
     elif name == "uri-parser":
@@ -171,13 +171,14 @@ def main():
     parser.add_argument('--external-dir',      dest='external_dir_path', help='The path for directory into packages delivered as copied source files will be installed.\n'
         'Must be inside the project source directory, Defaults to project_dir/source_dir_name/external.')
 
-    parser.add_argument('--config-file',      dest='config_file_path', help='Path of a json config file, alternative to command line options')
+    parser.add_argument('--config-file',      dest='config_file_path', 
+        help='Path of a json config file, alternative to command line options.\n Default duh.json')
     parser.add_argument('--log-actions',      dest='log_actions', action='store_true', help='creates a log of all cli commands ')
     parser.add_argument('--action-logfile',   dest='log_path', help='path of file for logging actions. Default ./action_log.log')
     args = parser.parse_args()
     config = "" #if args.config_file_path is None else get_config(args.config_file_path)
     if args.config_file_path is None:
-        config = get_config("./barb.json")
+        config = get_config("./duh.json")
     else:
         config = get_config(args.config_file_path)
 

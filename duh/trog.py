@@ -8,18 +8,18 @@ import shutil
 import duh.util as util 
 from .package import SourcePackage
 
-package_name = "urlparser"
+package_name = "trog"
 
 
-class UriParser(SourcePackage):
+class Trog(SourcePackage):
 	def __init__(self, name, version, the_defaults):
 		super().__init__(package_name, the_defaults)
 		self.name = name
 		self.version = version
-		self.git_url = "git@github.com:robertblackwell/urlparser.git"
-		self.package_clone_dir_path = os.path.join(self.defaults.clone_dir, "urlparser")
-		self.package_clone_dir_source_path = os.path.join(self.package_clone_dir_path, "urlparser")
-		self.package_stage_source_path = os.path.join(self.package_stage_external_src_dir_path, "uri_parser")
+		self.git_url = "git@github.com:robertblackwell/trog.git"
+		self.package_clone_dir_path = os.path.join(self.defaults.clone_dir, "trog")
+		self.package_clone_dir_source_path = os.path.join(self.package_clone_dir_path, "trog")
+		self.package_stage_source_path = os.path.join(self.package_stage_external_src_dir_path, "trog")
 	def get_package(self):
 		super().get_package_before()
 		util.rm_directory(self.package_clone_dir_path)
@@ -30,7 +30,7 @@ class UriParser(SourcePackage):
 	def stage_package(self):
 		super().stage_package_before()
 		util.clear_directory(self.package_stage_external_src_dir_path)
-		util.cp_directory_files(self.package_clone_dir_path, self.package_stage_external_src_dir_path, "Uri.*")
+		util.cp_directory_files(self.package_clone_dir_source_path, self.package_stage_external_src_dir_path, ".*")
 		# util.cp_directory_files(self.package_clone_dir_path, self.package_stage_external_src_dir_path, "http_parser.c")
 		util.list_directory(self.package_stage_external_src_dir_path)
 	def install_package(self):

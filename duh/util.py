@@ -77,6 +77,33 @@ def set_log_file(log_file_path):
 	logger.log_file_path = log_file_path
 	logger.open()
 
+# ensures that a directory exists and is empty
+def clear_directory(directory_path):
+	rm_directory(directory_path);
+	mkdir_p(directory_path)
+
+
+def list_directory(directory_path):
+	exec_cmd(["ls", "-al"], where = directory_path)
+# 
+# Clones a github repo, optionally with a --branch argument, 
+# command is performed with the specified directory as the working directory.
+#  This ensures that the cloned repo is named the same as the repo and located in the
+# specified working directory
+# 
+# @param string git_url 			In the form git@github:<username>/reponame.git 
+# 									or https://github.com/<username>/reportname
+# @param string where 				The desired working directory.
+# @param string|None git_branch_arg An argument for the git clone --branch option. Specifies which tag/branch to clone
+# 
+# @return Nothing
+# 
+def git_clone(git_url, cwd_where, git_branch_arg=None):
+	logger.writeln("git clone: {} {} into cwd {}".format(git_url, git_branch_arg, cwd_where))
+	if git_branch_arg is None:
+		exec_cmd(["git", "clone", git_url], where=cwd_where)
+	else:
+		exec_cmd(["git", "clone", git_url, "--branch", git_branch_arg], where = cwd_where)
 
 def rm_file(file_path):
 	if(os.path.isfile(file_path)):
@@ -129,7 +156,13 @@ def cp_directory_fulldir(src, dest):
 	if not dry_run:
 		shutil.copytree(src, dest)
 	logger.writeln("cp_directory_fulldir {} -> {}".format(src, dest))
-
+#
+# copy all the files from the src_directory_path that match the given regex patter
+# to the dest_directory_path. Does NOT recurse into sub-directories
+#  @param string src_directory_path
+#  @param string dest_directory_path
+#  @param string pattern default=".*" is a regex patter
+# 
 def cp_directory_files(src_directory_path, dest_directory_path, pattern=".*"):
 	regex = re.compile(pattern)
 	if os.path.isdir(src_directory_path) and os.path.isdir(dest_directory_path):
@@ -146,6 +179,18 @@ def cp_directory_files(src_directory_path, dest_directory_path, pattern=".*"):
 	else:
 		raise ValueError("cp_directory_files one of the arguments is not a directory {} {}".format(src_directory_path, dest_directory_path))
 
+#
+# copy the contents of the src_directory_path 
+# to the dest_directory_path. DOES recurse into sub-directories.
+# Unlike shutil.copytree the dest_subdirectory must already exist.
+# prior to calling this function.
+# 
+# @param string src_directory_path
+# @param string dest_directory_path  
+# @param string pattern 			Ignored
+# @return nothing
+# @throw ValueError if the inputs are not valid existing directory paths
+# 
 def cp_directory_contents(src_directory_path, dest_directory_path, pattern=".*"):
 	regex = re.compile(pattern)
 	if os.path.isdir(src_directory_path) and os.path.isdir(dest_directory_path):
