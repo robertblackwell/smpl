@@ -5,7 +5,7 @@ import os
 import pprint
 import shutil
 
-import duh.util as util 
+import smpl.util as util 
 from .package import LibraryPackage
 
 package_name = "boost"

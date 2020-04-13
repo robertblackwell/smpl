@@ -1,6 +1,6 @@
 {
-  "project_name": "duh",
-  "source_dir_name": "duh",
+  "project_name": "smpl",
+  "source_dir_name": "smpl",
   "dependencies": [
     { "name": "boost", "version": "1.72.1" },
     { "name": "openssl", "version": "1.1.1d" },

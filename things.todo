@@ -1,0 +1,8 @@
+Possible enhancements:
+  ☐ introduce new exec_cmd using Popen so as to stream stdout while command is running.
+  ☐ using Popen complete intention to stream output to console and log file
+  ☐ provide levels of verbosity
+  ☐ add colors to console output for errors
+  ☐ write a readme.md
+  ☐ external source packages  - provide option for installing in vendor/src and/or vendor/include
+  ☐ more clarity around naming directory paths  and where and how those names are set in the code

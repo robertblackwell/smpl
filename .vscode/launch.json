@@ -11,7 +11,27 @@
             "request": "launch",
             "program": "${workspaceFolder}/runner.py",
             "cwd":"${workspaceFolder}/project_pig",
-            "args":["--config-file", "${workspaceFolder}/project_pig/duh.json", "--log-actions"],
+            "args":["--config-file", "${workspaceFolder}/project_pig/smpl.yaml", "--log-actions"],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "test_object",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/tests/test_object.py",
+            "cwd":"${workspaceFolder}/tests",
+            "env":{"PYHTONPATH":"${workspaceFolder}/smpl:${workspaceFolder}:${PYTHONPATH}"},
+            "args":[],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "open",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/tests/popen.py",
+            "cwd":"${workspaceFolder}/tests",
+            "env":{"PYHTONPATH":"${workspaceFolder}/smpl:${workspaceFolder}:${PYTHONPATH}"},
+            "args":[],
             "console": "integratedTerminal"
         },
         {
@@ -20,7 +40,7 @@
             "request": "launch",
             "program": "${file}",
             "cwd":"${workspaceFolder}/test",
-            "args":["--config-file", "${workspaceFolder}/project_pig/duh.json", "--log-actions"],
+            "args":["--config-file", "${workspaceFolder}/project_pig/smpl.json", "--log-actions"],
             "console": "integratedTerminal"
         }
     ]

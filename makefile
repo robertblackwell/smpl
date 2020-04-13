@@ -1,7 +1,7 @@
 NOC_SHEBANG="--python-shebang='/usr/bin/env python'"
 MYNAME="Robert Blackwell"
 MYEMAIL="rob@whiteacorn.com"
-PROJECT_NAME="duh"
+PROJECT_NAME="smpl"
 LICENSE=MIT
 PREFIX=$(HOME)/.local
 
@@ -23,7 +23,7 @@ push:
 	git commit -a
 
 _license:
-	licenser -n $(MYNAME) -e $(MYEMAIL) -l "MIT" -p "duh"
+	licenser -n $(MYNAME) -e $(MYEMAIL) -l "MIT" -p "smpl"
 
 bumppatch:
 	bumpversion --current-version `python setup.py --version` patch
@@ -52,7 +52,7 @@ readme:
 
 .PHONY: dist
 dist:
-	rm -rfv duh.egg*
+	rm -rfv smpl.egg*
 	make readme
 	make git_commit
 	make bumpminor

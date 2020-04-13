@@ -5,7 +5,7 @@ import os
 import pprint
 import shutil
 
-import duh.util as util 
+import smpl.util as util 
 from .package import HeadersOnlyPackage
 
 
@@ -31,28 +31,13 @@ class Catch2(HeadersOnlyPackage):
 		self.single_include_dir = os.path.join(self.package_clone_dir_path, "single_include")
 
 	def get_package(self):
-		# return
-		# print("here")
-		super().get_package_before()
-		util.rm_directory("{}/{}".format(self.defaults.clone_dir, package_clone_stem))
+		util.rm_directory(self.package_clone_dir_path)
 		util.git_clone(self.git_url, self.defaults.clone_dir, self.git_branch_arg)
-		# util.run(["git", "clone", "https://github.com/catchorg/Catch2.git", "--branch", "{}".format(catch_release)], where=self.defaults.clone_dir)
-
-		super().get_package_after()
-	
+		util.list_directory(self.package_clone_dir_path)	
 	def stage_package(self):
-		super().stage_package_before()
-		util.rm_directory(self.package_stage_include_dir_path)
-		util.mkdir_p(self.package_stage_include_dir_path)
-
+		util.clear_directory(self.package_stage_include_dir_path)
 		util.cp_directory_contents(self.single_include_dir, self.package_stage_include_dir_path)
 
-		super().stage_package_after()
-
 	def install_package(self):
-		super().install_package_before()
-		util.rm_directory(self.package_vendor_include_dir_path)
-		util.mkdir_p(self.package_vendor_include_dir_path)
-
+		util.clear_directory(self.package_vendor_include_dir_path)
 		util.cp_directory_contents(self.package_stage_include_dir_path,  self.package_vendor_include_dir_path)
-		super().install_package_after()

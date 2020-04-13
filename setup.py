@@ -28,7 +28,7 @@ long_description = long_desc()
 
 version = re.search(
     '^__version__\s*=\s*"(.*)"',
-    open('duh/main.py').read(),
+    open('smpl/main.py').read(),
     re.M
     ).group(1)
 
@@ -36,10 +36,10 @@ version = re.search(
 
 
 setup(
-    name = "duh",
-    packages = ["duh"],
+    name = "smpl",
+    packages = ["smpl"],
     entry_points = {
-        "console_scripts": ['duh = duh.main:main']
+        "console_scripts": ['smpl = smpl.main:main']
         },
     version = version,
     description = "A python script to install c++ pacgaes for a c++ project. Personal tool only.",
@@ -55,11 +55,11 @@ setup(
 
     keywords='C++, package install',
 
-    test_suite="tests.test_duh",
+    test_suite="tests.test_smpl",
 
     author = "Robert Blackwell",
     author_email = "rob@whiteacorn.com",
-    url = "http://github.com/robertoblackwell/duh.git",
+    url = "http://github.com/robertoblackwell/smpl.git",
     license ='MIT',
     zip_safe = False
     )

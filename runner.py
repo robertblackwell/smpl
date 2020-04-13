@@ -5,7 +5,7 @@
 """Convenience wrapper for running bootstrap directly from source tree."""
 
 
-from duh.main import main
+from smpl.main import main
 
 
 if __name__ == '__main__':
