@@ -17,10 +17,10 @@ package_targz_file = "tar xvzf {}.tar.gz".format(openssl_name)
 
 
 class OpenSSL(LibraryPackage):
-	def __init__(self, name, version, the_defaults):
+	def __init__(self, name, parms, the_defaults):
 		super().__init__(package_name, the_defaults)
 		self.name = name
-		self.version = version
+		self.parms = parms
 
 		self.package_targz_file_path = os.path.join(self.defaults.clone_dir, package_targz_file)
 		self.wget_output_path = self.defaults.clone_dir
@@ -29,20 +29,20 @@ class OpenSSL(LibraryPackage):
 		self.package_clone_dir_versioned_path = os.path.join(self.defaults.clone_dir, "openssl-1.1.1f")
 
 	def get_package(self):
-		super().get_package_before()
-		util.rm_file(self.package_targz_file_path)
-		util.rm_directory(self.package_clone_dir_path)
-		util.run(["wget", "-O", self.package_targz_file_path, package_url])
+		self.get_and_unpack_tar(package_url, package_targz_file, openssl_name)
 
-		# unpack the tar file cd to the clone_dir before unpacking
-		# this will result in a new dir inside clone_dir with a name line boost_1_72.2
-		util.run(["tar", "-xvzf", self.package_targz_file_path, "-C", self.defaults.clone_dir])
+		# util.rm_file(self.package_targz_file_path)
+		# util.rm_directory(self.package_clone_dir_path)
+		# util.run(["wget", "-O", self.package_targz_file_path, package_url])
 
-		# run("wget -O {} {}".format(self.wget_output_path, package_url))
-		# run("tar xvzf {} -C {}".format(self.package_targz_file_path, self.package_clone_dir_path))
-		# run("ls -al {}".format(self.package_clone_dir_path))
-		util.list_directory(self.package_clone_dir_versioned_path)
-		super().get_package_after()
+		# # unpack the tar file cd to the clone_dir before unpacking
+		# # this will result in a new dir inside clone_dir with a name line boost_1_72.2
+		# util.run(["tar", "-xvzf", self.package_targz_file_path, "-C", self.defaults.clone_dir])
+
+		# # run("wget -O {} {}".format(self.wget_output_path, package_url))
+		# # run("tar xvzf {} -C {}".format(self.package_targz_file_path, self.package_clone_dir_path))
+		# # run("ls -al {}".format(self.package_clone_dir_path))
+		# util.list_directory(self.package_clone_dir_versioned_path)
 	
 	def stage_package(self):
 		util.clear_directory(self.package_stage_include_dir_path)
@@ -60,23 +60,26 @@ class OpenSSL(LibraryPackage):
 
 		util.run(["make", "all"], self.package_clone_dir_versioned_path)
 		util.run(["make", "install"], self.package_clone_dir_versioned_path)
-		super().stage_package_after()
 
 	def install_package(self):
-		super().install_package_before()
-		util.clear_directory(self.package_vendor_include_dir_path)
-		util.run(["rm", "-rf", "{}/libcrypto*".format(self.vendor_lib_dir_path)])
-		util.run(["rm", "-rf", "{}/libssl*".format(self.vendor_lib_dir_path)])
+		self.headers_from_stage_to_vendor("openssl","openssl")
+		self.libs_from_stage_to_vendor("libssl.*")
+		self.libs_from_stage_to_vendor("libcrypto.*")
 
-		util.cp_directory_contents(self.package_stage_include_dir_path,  self.package_vendor_include_dir_path)
-		util.cp_directory_files(self.stage_lib_dir_path,  self.vendor_lib_dir_path, "lib.*")
+		# self.libs_from_stage_to_vendor("libboost.*")
 
-		# util.cp_rv_fulldir(self.package_stage_include_dir_path,  self.package_vendor_include_dir_path)
-		util.cp_directory_contents(self.package_stage_include_dir_path, self.package_vendor_include_dir_path)
-		util.cp_directory_files(self.stage_lib_dir_path, self.vendor_lib_dir_path, "libcrypto.*")
-		util.cp_directory_files(self.stage_lib_dir_path, self.vendor_lib_dir_path, "libcrypto.*")
+		# util.clear_directory(self.package_vendor_include_dir_path)
+		# util.run(["rm", "-rf", "{}/libcrypto*".format(self.vendor_lib_dir_path)])
+		# util.run(["rm", "-rf", "{}/libssl*".format(self.vendor_lib_dir_path)])
 
-		super().install_package_after()
+		# util.cp_directory_contents(self.package_stage_include_dir_path,  self.package_vendor_include_dir_path)
+		# util.cp_directory_files(self.stage_lib_dir_path,  self.vendor_lib_dir_path, "lib.*")
+
+		# # util.cp_rv_fulldir(self.package_stage_include_dir_path,  self.package_vendor_include_dir_path)
+		# util.cp_directory_contents(self.package_stage_include_dir_path, self.package_vendor_include_dir_path)
+		# util.cp_directory_files(self.stage_lib_dir_path, self.vendor_lib_dir_path, "libcrypto.*")
+		# util.cp_directory_files(self.stage_lib_dir_path, self.vendor_lib_dir_path, "libcrypto.*")
+
 
 	# 	self.package_targz_file_path = os.path.join(self.defaults.clone_dir, package_targz_file)
 	# 	self.wget_output_path = os.path.join(self.defaults.clone_dir, package_targz_file) 

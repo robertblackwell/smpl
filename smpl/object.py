@@ -12,11 +12,14 @@ import yaml
 import copy
 from types import SimpleNamespace as Namespace
 
+
 class BasicObject(object):
     def __init__(self):
         pass
+
     def setKeyValue(self, k, v):
         self.__dict__[k] = v
+
 
 def parse_to_object(thing):
     if isinstance(thing, dict):
@@ -33,7 +36,6 @@ def parse_to_object(thing):
     
     else:
         return thing
-
 
 
 def merge_objects(obj_of_values, obj_of_default_values):

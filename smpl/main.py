@@ -9,7 +9,6 @@ import os
 import subprocess
 import json
 import yaml
-import bunch
 from types import SimpleNamespace as Namespace
 
 from .boost import Boost
@@ -22,7 +21,9 @@ from .uri_parser import UriParser
 from .cxxurl import CxxUrl
 from .catch2 import Catch2
 from .nlohmann_json import NLohmannJson
+from .doctest import Doctest
 
+import smpl.defaults as Defaults 
 import smpl.util as util 
 import smpl.object as Object
 
@@ -86,13 +87,23 @@ logfile = False
 
 #         print("Config class" + type(d['dependencies']))
 #         # self.__dict__ = d
+def isCommentLine(line):
+    for ch in line:
+        if ch == "#":
+            return True
+    return False
 
-def file_get_contents(file_name):
+def file_get_contents(file_name: str):
+    data = ""
     with open(file_name, 'r') as file:
+    #     for line in enumerate(file):
+    #         if not isCommentLine(line):
+    #             data += line
+    # return data
         data = file.read()
     return data
 
-def get_config(file_name):
+def get_config(file_name: str):
     """ 
     # reads either a json or yaml file to get part of the config
     # @param string file_name Path for config file
@@ -137,57 +148,57 @@ def get_config(file_name):
 #     return obj1
 
 
-class Defaults:
-    def __init__(self, the_project_name, the_project_dir):
-        self.project_name = the_project_name
-        self.project_dir = the_project_dir
-        self.clone_name = "clone"
-        self.stage_name = "stage"
-        self.external_name = "external"
-        self.vendor_name = "vendor"
-        self.scripts_name = "scripts"
-        self.unpack_dir = os.path.join(the_project_dir, self.scripts_name, self.clone_name)
-        self.source_dir = os.path.join(the_project_dir, the_project_name)
-        self.external_dir = os.path.join(the_project_dir, the_project_name, self.external_name)
-        self.vendor_dir = os.path.join(the_project_dir, self.vendor_name)
+# class Defaults:
+#     def __init__(self, the_project_name, the_project_dir):
+#         self.project_name = the_project_name
+#         self.project_dir = the_project_dir
+#         self.clone_name = "clone"
+#         self.stage_name = "stage"
+#         self.external_name = "external"
+#         self.vendor_name = "vendor"
+#         self.scripts_name = "scripts"
+#         self.unpack_dir = os.path.join(the_project_dir, self.scripts_name, self.clone_name)
+#         self.source_dir = os.path.join(the_project_dir, the_project_name)
+#         self.external_dir = os.path.join(the_project_dir, the_project_name, self.external_name)
+#         self.vendor_dir = os.path.join(the_project_dir, self.vendor_name)
 
 
-def validate_and_construct_names(args):
-    if args.project_name is None: 
-        print("Error: project name is required")
-        exit()
-    if args.project_dir is None: 
-        project_dir = os.getcwd()
-    else:
-        project_dir = args.project_dir
+# def validate_and_construct_names(args):
+#     if args.project_name is None: 
+#         print("Error: project name is required")
+#         exit()
+#     if args.project_dir is None: 
+#         project_dir = os.getcwd()
+#     else:
+#         project_dir = args.project_dir
 
-    defaults = Defaults(args.project_name, project_dir)
+#     defaults = Defaults(args.project_name, project_dir)
 
-    a = defaults.project_name.lower()
-    b = os.path.basename(defaults.project_dir).lower()
-    xx = (a != b)
-    if defaults.project_name.lower() != os.path.basename(defaults.project_dir).lower():
-        print("project name [%s] and current working directory [%s] have conflict" % (defaults.project_name.lower(), os.path.basename(defaults.project_dir).lower()))
-        exit()
+#     a = defaults.project_name.lower()
+#     b = os.path.basename(defaults.project_dir).lower()
+#     xx = (a != b)
+#     if defaults.project_name.lower() != os.path.basename(defaults.project_dir).lower():
+#         print("project name [%s] and current working directory [%s] have conflict" % (defaults.project_name.lower(), os.path.basename(defaults.project_dir).lower()))
+#         exit()
 
-    if args.source_dir_name is None:
-        defaults.source_dir = os.path.join(defaults.project_dir, defaults.project_name.lower())
-    else:
-        defaults.source_dir = os.path.join(defaults.project_dir, args.source_dir_name)
+#     if args.source_dir_name is None:
+#         defaults.source_dir = os.path.join(defaults.project_dir, defaults.project_name.lower())
+#     else:
+#         defaults.source_dir = os.path.join(defaults.project_dir, args.source_dir_name)
 
-    if not os.path.isdir(defaults.source_dir):
-        print("The given source dir [%s] does not exist" % defaults.source_dir)
-        exit()
-    if os.path.realpath(os.path.join(defaults.source_dir, "../")) != defaults.project_dir:
-        print("The given source dir [%s] is not an immediate subdir of the project dir [%s]" % (defaults.source_dir, defaults.project_dir))
-        exit()
+#     if not os.path.isdir(defaults.source_dir):
+#         print("The given source dir [%s] does not exist" % defaults.source_dir)
+#         exit()
+#     if os.path.realpath(os.path.join(defaults.source_dir, "../")) != defaults.project_dir:
+#         print("The given source dir [%s] is not an immediate subdir of the project dir [%s]" % (defaults.source_dir, defaults.project_dir))
+#         exit()
 
-    defaults.script_dir = os.path.join(defaults.project_dir, 'scripts')
-    defaults.clone_dir = os.path.join(defaults.script_dir, 'clone')
-    defaults.stage_dir = os.path.join(defaults.script_dir, 'stage')
-    defaults.vendor_dir = os.path.join(defaults.project_dir, 'vendor')
-    defaults.external_dir = os.path.join(defaults.source_dir, 'external')
-    return defaults
+#     defaults.script_dir = os.path.join(defaults.project_dir, 'scripts')
+#     defaults.clone_dir = os.path.join(defaults.script_dir, 'clone')
+#     defaults.stage_dir = os.path.join(defaults.script_dir, 'stage')
+#     defaults.vendor_dir = os.path.join(defaults.project_dir, 'vendor')
+#     defaults.external_dir = os.path.join(defaults.source_dir, 'external')
+#     return defaults
 
 def create_clean_install_dirs(defaults):
     util.clear_directory(defaults.clone_dir)
@@ -206,29 +217,32 @@ def clean_only(defaults):
     util.rm_directory(os.path.join(defaults.vendor_dir))
 
 
-def action(name, version, defaults):
-    print("installing: %s %s " % (name, version))
+def action(name, parms, defaults):
+    print("installing: %s %s " % (name, parms))
     if name == "boost":
-        handler = Boost(name, version, defaults)
+        handler = Boost(name, parms, defaults)
     elif name == "openssl":
-        handler = OpenSSL(name, version, defaults)
+        handler = OpenSSL(name, parms, defaults)
     elif name == "cert_lib":
-        handler = CertLib(name, version, defaults)
+        handler = CertLib(name, parms, defaults)
     elif name == "simple_buffer":
-        handler = SimpleBuffer(name, version, defaults)
+        handler = SimpleBuffer(name, parms, defaults)
     elif name == "trog":
-        handler = Trog(name, version, defaults)
+        handler = Trog(name, parms, defaults)
     elif name == "http_parser":
-        handler = HttpParser(name, version, defaults)
+        handler = HttpParser(name, parms, defaults)
     elif name == "uri-parser":
-        handler = UriParser(name, version, defaults)
+        handler = UriParser(name, parms, defaults)
     elif name == "cxxurl":
-        handler = CxxUrl(name, version, defaults)
+        handler = CxxUrl(name, parms, defaults)
     elif name == "catch2":
-        handler = Catch2(name, version, defaults)
+        handler = Catch2(name, parms, defaults)
+    elif name == "doctest":
+        handler = Doctest(name, parms, defaults)
     elif name == "nlohmann_json":
-        handler = NLohmannJson(name, version, defaults)
+        handler = NLohmannJson(name, parms, defaults)
     else:
+        raise ValueExeption("invalid action name={}".format(name))
         return
     handler.get_package()
     handler.stage_package()
@@ -313,7 +327,7 @@ def main():
 
     dependencies = config.dependencies
     m = Object.merge_objects(config, args)
-    defaults = validate_and_construct_names(m)
+    defaults = Defaults.validate_and_construct_names(m)
     if args.clean_before_flag:
         create_clean_install_dirs(defaults)
     
@@ -321,7 +335,7 @@ def main():
         clean_only(defaults)
     else:
         for d in dependencies:
-            action(d.name, d.version, defaults)
+            action(d.name, d.parms, defaults)
 
 
 if __name__ == "__main__":

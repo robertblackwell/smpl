@@ -8,23 +8,26 @@ class Logger:
 		self.enabled = False
 		self.log_file_path = 'action_log.log'
 		self.log_file = None
+
 	def open(self):
 		self.enabled = True
 		self.log_file = open(self.log_file_path, "w+")
 	
 	def write(self, text):
-		if (self.enabled):
+		if self.enabled:
 			self.log_file.write(text)
 
 	def writeln(self, line):
 		if self.enabled:
 			self.log_file.write(line + "\n")
 
+
 log_file_path = ""
 log_file = None
 
 logger = Logger()
 dry_run = False
+
 
 def try_popen(cmd, where):
 	
@@ -47,13 +50,13 @@ def exec_cmd(cmd, where):
 		return "", None
 	if where is None:
 		try:
-			result = subprocess.run(cmd)#, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+			result = subprocess.run(cmd)   # stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 			s = result.returncode
 			s3 = result.stderr
 			s2 = result.stdout
 			s2 = result.stdout
 		except Exception as exception:
-			print ("An error occurred while running command [{}] error type: " +type(exception).__name__ + " {}".format(cmd, str(exception)))
+			print("An error occurred while running command [{}] error type: " +type(exception).__name__ + " {}".format(cmd, str(exception)))
 			quit()
 	else:		
 		try:
@@ -63,7 +66,7 @@ def exec_cmd(cmd, where):
 			s2 = result.stdout
 			s2 = result.stdout
 		except Exception as exception:
-			print ("An error occurred while running command [{}] error type: " +type(exception).__name__ + " {}".format(cmd, str(exception)))
+			print("An error occurred while running command [{}] error type: " +type(exception).__name__ + " {}".format(cmd, str(exception)))
 			quit()
 
 		# print("stdout: ", stdout)

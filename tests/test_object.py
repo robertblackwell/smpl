@@ -9,6 +9,17 @@ print(sys.path)
 
 import smpl.object as Object
 
+class MyBase:
+    def __init__(self):
+        pass
+
+    def do_something(self):
+        print(self.variable_set_by_derived_class)
+
+class MyDerived(MyBase):
+    def __init__(self):
+        self.variable_set_by_derived_class = "This was set by myderived class"
+
 class test_object_test(unittest.TestCase):
 
     def test_merge(self):
@@ -50,6 +61,23 @@ class test_object_test(unittest.TestCase):
             self.assertEqual(active_values.__dict__[k], expected[k])
         
         print(active_values)
+
+
+class test_paths_test(unittest.TestCase):
+    def test_paths(self):
+        p1 = "/home/robert"
+        p2 = "../"
+        x1 = os.path.isabs(p1)
+        x2 = os.path.isabs(p2)
+        x3 = os.path.abspath(p1)
+        x4 = os.path.abspath(p2)
+        print(p1,p2)
+
+class test_inherit_test(unittest.TestCase):
+    def test_1(self):
+        my_derived = MyDerived()
+        my_derived.do_something()
+
 
 class test_merge_test(unittest.TestCase):
 

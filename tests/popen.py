@@ -1,6 +1,8 @@
 import subprocess
 import sys
 import os
+from typing import List
+LisOfString = List[str]
 
 import termcolor as TC
 
@@ -35,8 +37,8 @@ def stream_it(thing):
         line = stdout_line.decode("utf-8") 
         sys.stdout.write(line)
 
-def popen_exec(cmd):
-    output = ""
+def popen_exec(cmd: List[str]):
+    output: string = ""
     try:
         result = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stream_it(result.stdout)
@@ -49,7 +51,7 @@ def popen_exec(cmd):
         #     output += line
 
         result.stdout.close()
-        return_code = result.wait()
+        return_code: int = result.wait()
         if return_code != 0:
             x = result.stderr
             # print(t.bold_red_on_black('We got a bad return code : ') + t.bold_green(str(return_code)) )
@@ -70,6 +72,6 @@ def popen_exec(cmd):
 cwd = os.getcwd()
 loop = os.path.join(cwd, "loop.py")
 cmd = ["/usr/bin/python3", loop]
-print(t.bold('We got a bad return code : '))
+print('We got a bad return code : ')
 
 popen_exec(cmd)

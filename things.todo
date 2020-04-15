@@ -6,3 +6,9 @@ Possible enhancements:
   ☐ write a readme.md
   ☐ external source packages  - provide option for installing in vendor/src and/or vendor/include
   ☐ more clarity around naming directory paths  and where and how those names are set in the code
+Start using:
+  ☐ make sure it puts everything in the place marvin++ expects
+  ☐ save the shell scripts from marvin project
+  ☐ 
+Desigh Issues:
+  ☐ the package classes are small never the less there is a lot of duplication. The way to fix it is to make the base classes hold the functions (with parameters) and have the leaf classes set the properties on which the base class functions will operate.
