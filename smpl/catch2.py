@@ -13,6 +13,13 @@ from .package import HeadersOnlyPackage
 class Catch2(HeadersOnlyPackage):
 	def __init__(self, name, parms, the_defaults):
 		package_name="Catch2"
+
+		parms.repo_name = "Catch2"
+		parms.repo_branch_argument = "v2.11.1"
+		parms.stage_name = "catch2"
+		parms.vendor_name = "catch2"
+		parms.repo_sub_directory = "single_include/catch2"
+		
 		super().__init__(package_name, the_defaults)
 		self.name = name
 		self.package_clone_dir_path = os.path.join(self.defaults.clone_dir, "Catch2")

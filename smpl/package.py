@@ -169,6 +169,9 @@ class LibraryPackage(PackageBase):
 # 
 # """
 class HeadersOnlyPackage(PackageBase):
+	"""
+	This is silly python comment
+	"""
 	def __init__(self, package_name, the_defaults):
 		super().__init__(package_name, the_defaults)
 		print("HeaderOnlyPackage")
