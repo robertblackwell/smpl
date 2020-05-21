@@ -34,6 +34,9 @@ class PackageBase(object):
 	def __init__(self, package_name, the_defaults):
 		self.defaults = the_defaults
 		self.package_name = package_name
+		self.release = None
+		self.git_url = None
+		self.package_url = None
 		self.package_clone_dir_path = os.path.join(self.defaults.clone_dir, package_name)
 		self.stage_include_dir_path = os.path.join(self.defaults.script_dir, "stage", "include")
 		self.stage_lib_dir_path = os.path.join(self.defaults.script_dir, "stage", "lib")
@@ -42,7 +45,13 @@ class PackageBase(object):
 
 		self.package_stage_include_dir_path = os.path.join(self.stage_include_dir_path, package_name)
 		self.package_vendor_include_dir_path = os.path.join(self.vendor_include_dir_path, package_name)
-	
+
+	def list_package(self) -> str:
+		return "{:21} release: {:11}  url: {}".format(
+			self.package_name[0:19],
+			self.release[0:9] if self.release is not None else "",
+			self.git_url if self.git_url is not None else self.package_url )
+
 	# """
 	# repo_url: 	is something like git@github.com:robertblackwell/x509_certificate_library
 	# 				or fil:///home/robert/git-repos/x509_certificate_library
@@ -174,7 +183,7 @@ class HeadersOnlyPackage(PackageBase):
 	"""
 	def __init__(self, package_name, the_defaults):
 		super().__init__(package_name, the_defaults)
-		print("HeaderOnlyPackage")
+		# print("HeaderOnlyPackage")
 	
 	# """
 	# copy the header files for a headers only package from their location in the clone
@@ -188,7 +197,7 @@ class HeadersOnlyPackage(PackageBase):
 	# """
 	def stage_headers_only_from_repo(self, repo_name, stage_name, repo_sub_directory=None):
 		to_dir = os.path.join(self.stage_include_dir_path, stage_name)
-		if (repo_sub_directory is None):
+		if repo_sub_directory is None:
 			from_dir = os.path.join(self.defaults.clone_dir, repo_name)
 		else:
 			from_dir = os.path.join(self.defaults.clone_dir, repo_name, repo_sub_directory)
@@ -229,7 +238,7 @@ class HeadersOnlyPackage(PackageBase):
 class SourcePackage(PackageBase):
 	def __init__(self, package_name, the_defaults):
 		super().__init__(package_name, the_defaults)
-		print("SourcePackage")
+		# print("SourcePackage")
 		self.stage_external_src_dir_path = os.path.join(self.defaults.stage_dir,"external_src")
 		self.package_stage_external_src_dir_path = os.path.join(self.stage_external_src_dir_path, self.package_name)
 		self.package_external_src_dir_path = os.path.join(self.defaults.source_dir, "external_src", self.package_name)
@@ -246,7 +255,7 @@ class SourcePackage(PackageBase):
 	def stage_source(self, repo_name, stage_name, repo_sub_directory=None):
 
 		to_dir = os.path.join(self.stage_external_src_dir_path, stage_name)
-		if (repo_sub_directory is None):
+		if repo_sub_directory is None:
 			from_dir = os.path.join(self.defaults.clone_dir, repo_name)
 		else:
 			from_dir = os.path.join(self.defaults.clone_dir, repo_name, repo_sub_directory)

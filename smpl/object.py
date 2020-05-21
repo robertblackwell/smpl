@@ -1,17 +1,4 @@
-#!/usr/bin/env python3
-
-import sys
-import argparse
-import datetime
-import pprint
-import optparse
-import os
-import subprocess
-import json
-import yaml
 import copy
-from types import SimpleNamespace as Namespace
-
 
 class BasicObject(object):
     def __init__(self):

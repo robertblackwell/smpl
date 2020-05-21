@@ -1,13 +1,18 @@
+import inspect
+import os
+import sys
 import unittest
-import os,sys,inspect
+
+sys.path.append("../")
+
+import smpl.object as Object
 
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
-sys.path.insert(0,os.path.join(parentdir)) 
+sys.path.insert(0, os.path.join(parentdir))
 
 print(sys.path)
 
-import smpl.object as Object
 
 class MyBase:
     def __init__(self):
@@ -16,11 +21,14 @@ class MyBase:
     def do_something(self):
         print(self.variable_set_by_derived_class)
 
+
 class MyDerived(MyBase):
     def __init__(self):
+        super().__init__()
         self.variable_set_by_derived_class = "This was set by myderived class"
 
-class test_object_test(unittest.TestCase):
+
+class TestObjectTest(unittest.TestCase):
 
     def test_merge(self):
         d_defaults = {
@@ -59,11 +67,11 @@ class test_object_test(unittest.TestCase):
         self.assertEqual(len(expected), len(active_values.__dict__))
         for k in active_values.__dict__:
             self.assertEqual(active_values.__dict__[k], expected[k])
-        
+
         print(active_values)
 
 
-class test_paths_test(unittest.TestCase):
+class TestPathsTest(unittest.TestCase):
     def test_paths(self):
         p1 = "/home/robert"
         p2 = "../"
@@ -71,30 +79,31 @@ class test_paths_test(unittest.TestCase):
         x2 = os.path.isabs(p2)
         x3 = os.path.abspath(p1)
         x4 = os.path.abspath(p2)
-        print(p1,p2)
+        print(p1, p2)
 
-class test_inherit_test(unittest.TestCase):
+
+class TestInheritTest(unittest.TestCase):
     def test_1(self):
         my_derived = MyDerived()
         my_derived.do_something()
 
 
-class test_merge_test(unittest.TestCase):
+class TestMergeTest(unittest.TestCase):
 
-    def test_parse(self) :
+    def test_parse(self):
         d = {
-            "one":'1111', 
-            "ar":[
-                {"a":"aaaa"},
-                {"b":"bbbb"}
+            "one": '1111',
+            "ar": [
+                {"a": "aaaa"},
+                {"b": "bbbb"}
             ],
-            "ar2":[
-                1,2,3,4,5
+            "ar2": [
+                1, 2, 3, 4, 5
             ],
             "d2": {
-                "d3":{
-                    "a":"11111111111111",
-                    "b":"2222222222222"
+                "d3": {
+                    "a": "11111111111111",
+                    "b": "2222222222222"
                 }
             }
         }
@@ -105,9 +114,12 @@ class test_merge_test(unittest.TestCase):
         self.assertEqual(ob.d2.d3.b, "2222222222222")
         print(ob)
 
-def mainx():
-    t = test_object_test()
-    t.test_parse()
+
+#
+# def mainx():
+#     t = test_object_test()
+#     t.test_parse()
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -1,29 +1,21 @@
-#!/usr/bin/env python3
-
-import sys
-import argparse
-import datetime
-import pprint
-import optparse
 import os
-import subprocess
-import json
-import yaml
-from types import SimpleNamespace as Namespace
 
 class Defaults:
     def __init__(self, the_project_name, the_project_dir):
         self.project_name = the_project_name
         self.project_dir = the_project_dir
-        self.clone_name = "clone"
-        self.stage_name = "stage"
         self.external_name = "external_src"
         self.vendor_name = "vendor"
         self.scripts_name = "scripts"
+        self.clone_name = "clone"
+        self.stage_name = "stage"
+        self.clone_dir = os.path.join(the_project_dir, self.scripts_name, self.clone_name)
+        self.stage_dir = os.path.join(the_project_dir, self.scripts_name, self.stage_name)
         self.unpack_dir = os.path.join(the_project_dir, self.scripts_name, self.clone_name)
         self.source_dir = os.path.join(the_project_dir, the_project_name)
         self.external_dir = os.path.join(the_project_dir, the_project_name, self.external_name)
         self.vendor_dir = os.path.join(the_project_dir, self.vendor_name)
+        self.dependencies = {}
 
 
 def validate_and_construct_names(args) -> Defaults:
@@ -76,6 +68,8 @@ def validate_and_construct_names(args) -> Defaults:
         defaults.external_dir = os.path.abspath(args.external_dir_path)
     else:
         defaults.external_dir = os.path.join(defaults.source_dir, 'external')
-    
+
+    for d in args.dependencies:
+        defaults.dependencies[d.name] = d.parms
     return defaults
 
