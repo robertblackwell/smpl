@@ -59,7 +59,7 @@ logfile = False
 #
 
 def main():
-    __version__ = "0.2.0"
+    __version__ = "0.3.0"
     parser = cli_interface.define_cli_interface()
 
     args = parser.parse_args()
