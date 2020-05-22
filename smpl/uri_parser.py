@@ -1,17 +1,17 @@
 import os
 from smpl.package import SourcePackage
-
+from smpl.config_file import ConfigObject, PackageParms
 
 class UriParser(SourcePackage):
-	def __init__(self, name, parms, the_defaults):
+	def __init__(self, name, parms: PackageParms, cfg_obj: ConfigObject):
 		self.package_name = "urlparser"
-		super().__init__(name, the_defaults)
+		super().__init__(name, cfg_obj)
 		self.name = name
 		self.parms = parms
 		self.package_git_name = "urlparser"
 		self.release = ""
 		self.git_url = "git@github.com:robertblackwell/{}.git".format(self.package_git_name)
-		self.package_clone_dir_path = os.path.join(self.defaults.clone_dir, self.package_git_name)
+		self.package_clone_dir_path = os.path.join(self.cfg_obj.clone_dir, self.package_git_name)
 		self.package_clone_dir_source_path = os.path.join(self.package_clone_dir_path, self.package_stage_include_dir_path)
 		self.package_stage_source_path = os.path.join(self.package_stage_external_src_dir_path, self.package_stage_include_dir_path)
 

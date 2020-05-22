@@ -1,18 +1,19 @@
 import os
 import smpl.util as util
-from .package import LibraryPackage
+from smpl.package import LibraryPackage
+from smpl.config_file import ConfigObject, PackageParms
 
 class CertLib(LibraryPackage):
-    def __init__(self, name, parms, the_defaults):
-        super().__init__(name, the_defaults)
+    def __init__(self, name, parms: PackageParms, cfg_obj: ConfigObject):
+        super().__init__(name, cfg_obj)
         self.name = name
         self.parms = parms
         self.release = "v0.1.0"
         self.git_url = "https://github.com/robertblackwell/x509_certificate_library.git"
-        self.package_clone_dir_path = os.path.join(self.defaults.clone_dir, "x509_certificate_library")
+        self.package_clone_dir_path = os.path.join(self.cfg_obj.clone_dir, "x509_certificate_library")
         self.git_branch_arg = self.release
-        self.package_stage_include_dir_path = os.path.join(self.defaults.stage_dir, "include", "cert")
-        self.package_vendor_include_dir_path = os.path.join(self.defaults.vendor_dir, "include", "cert")
+        self.package_stage_include_dir_path = os.path.join(self.cfg_obj.stage_dir, "include", "cert")
+        self.package_vendor_include_dir_path = os.path.join(self.cfg_obj.vendor_dir, "include", "cert")
         self.cmake_dir = os.path.join(self.package_clone_dir_path, "cmake-build-debug")
 
     def get_package(self):
@@ -30,8 +31,8 @@ class CertLib(LibraryPackage):
         util.clear_directory(self.cmake_dir)
         util.run([
             "cmake",
-            "-DVENDOR_DIR={}".format(self.defaults.stage_dir),
-            "-DSTAGE_DIR={}".format(self.defaults.stage_dir),
+            "-DVENDOR_DIR={}".format(self.cfg_obj.stage_dir),
+            "-DSTAGE_DIR={}".format(self.cfg_obj.stage_dir),
             ".."
         ], self.cmake_dir)
         util.run([

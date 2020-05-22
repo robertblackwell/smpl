@@ -1,15 +1,15 @@
 import os
-from smpl.defaults import Defaults
+from smpl.config_file import ConfigObject, PackageParms
 
 from .package import HeadersOnlyPackage
 
 
 class Doctest(HeadersOnlyPackage):
-    def __init__(self, name: str, parms, the_defaults: Defaults):
-        super().__init__(name, the_defaults)
+    def __init__(self, name: str, parms: PackageParms, cfg_obj: ConfigObject):
+        super().__init__(name, cfg_obj)
         self.name = name
         # the name of the directory that the cloned repo will unpack into
-        self.package_clone_dir_path = os.path.join(self.defaults.clone_dir, "doctest")
+        self.package_clone_dir_path = os.path.join(self.cfg_obj.clone_dir, "doctest")
         self.parms = parms
 
         # the release must match a repo tag

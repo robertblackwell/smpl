@@ -1,9 +1,9 @@
 import os
 from .package import HeadersOnlyPackage
-
+from smpl.config_file import ConfigObject, PackageParms
 
 class Catch2(HeadersOnlyPackage):
-    def __init__(self, name, parms, the_defaults):
+    def __init__(self, name, parms: PackageParms, cfg_obj: ConfigObject):
         package_name = name
 
         parms.repo_name = "Catch2"
@@ -12,9 +12,9 @@ class Catch2(HeadersOnlyPackage):
         parms.vendor_name = "catch2"
         parms.repo_sub_directory = "single_include/catch2"
 
-        super().__init__(package_name, the_defaults)
+        super().__init__(package_name, cfg_obj)
         self.name = name
-        self.package_clone_dir_path = os.path.join(self.defaults.clone_dir, "Catch2")
+        self.package_clone_dir_path = os.path.join(self.cfg_obj.clone_dir, "Catch2")
         self.parms = parms
         self.release = "v2.12.1"
         self.git_url = "https://github.com/catchorg/Catch2.git"

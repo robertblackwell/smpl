@@ -1,6 +1,7 @@
 import os
 import smpl.util as util
 from smpl.package import LibraryPackage
+from smpl.config_file import ConfigObject, PackageParms
 
 supported_versions = {
     "1.72.0": {
@@ -23,25 +24,24 @@ supported_versions = {
 
 
 class Boost(LibraryPackage):
-    def __init__(self, name, parms, the_defaults):
-        super().__init__(name, the_defaults)
-        d = the_defaults
-        v = d.dependencies[name].version
-        if v not in supported_versions:
+    def __init__(self, name, parms: PackageParms, cfg_obj: ConfigObject):
+        super().__init__(name, cfg_obj)
+        if parms.version not in supported_versions:
+            v = ", ".join(supported_versions.keys())
             raise ValueError(
-                "config file specifies boost version {} can only install version {}".format(v, boost_release))
-
+                "config file specifies boost version {} can only install version {}".format(parms.version, v))
+        vers = parms.version
         self.name = name
         self.parms = parms
-        self.release = v
-        self.package_url = supported_versions[v]['url']
-        self.targz = supported_versions[v]['targz']
-        self.repo_name = supported_versions[v]['repo_name']
+        self.release = vers
+        self.package_url = supported_versions[vers]['url']
+        self.targz = supported_versions[vers]['targz']
+        self.repo_name = supported_versions[vers]['repo_name']
 
-        self.package_targz_file_path = os.path.join(self.defaults.clone_dir, self.targz)
-        self.wget_output_path = os.path.join(self.defaults.clone_dir, self.targz)
-        self.package_targz_file_path = os.path.join(self.defaults.clone_dir, self.targz)
-        self.clone_dir_path = os.path.join(self.defaults.clone_dir, self.repo_name)
+        self.package_targz_file_path = os.path.join(self.cfg_obj.clone_dir, self.targz)
+        self.wget_output_path = os.path.join(self.cfg_obj.clone_dir, self.targz)
+        self.package_targz_file_path = os.path.join(self.cfg_obj.clone_dir, self.targz)
+        self.clone_dir_path = os.path.join(self.cfg_obj.clone_dir, self.repo_name)
 
     def get_package(self):
         self.get_and_unpack_tar(self.package_url, self.targz, self.repo_name)
@@ -60,7 +60,7 @@ class Boost(LibraryPackage):
 
         util.run([
             "./bootstrap.sh",
-            "--prefix={}".format(self.defaults.stage_dir),
+            "--prefix={}".format(self.cfg_obj.stage_dir),
             "darwin64-x86_64-cc"
         ], self.clone_dir_path)
         util.run([

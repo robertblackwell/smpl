@@ -59,7 +59,7 @@ def dispatch_all(subcmd, cfg_obj):
 
 def dispatch_package(package_name: str, subcmd: str, parms: Any, cfg_obj: configuration.ConfigObject) -> None:
     h = package_handler(package_name, parms, cfg_obj)
-    if subcmd == "install":
+    if subcmd == "all":
         h.get_package()
         h.stage_package()
         h.install_package()
@@ -67,16 +67,16 @@ def dispatch_package(package_name: str, subcmd: str, parms: Any, cfg_obj: config
         h.get_package()
     elif subcmd == "build":
         h.stage_package()
-    elif subcmd == "vendor":
+    elif subcmd == "install":
         h.install_package()
     elif subcmd == "list":
         print(h.list_package())
     pass
 
 def dispatch(subcmd: str, arg: Union[str, None], cfg_obj: configuration.ConfigObject) -> None:
-    if subcmd not in ["download", "build", "vendor", "install", "clean", "list"]:
+    if subcmd not in ["download", "build", "all", "install", "clean", "list"]:
         raise ValueError("subcmd : {} is invalid".format(subcmd))
-    if subcmd in ["clean","llist"] and arg is not None:
+    if subcmd in ["clean","list"] and arg is not None:
         raise ValueError("subcmd clean/list cannot have an argument - given {} is invalid".format(arg))
     if arg is not None:
         if arg not in handler_table:

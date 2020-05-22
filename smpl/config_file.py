@@ -6,8 +6,6 @@ from typing import Any, Dict
 import yaml
 from types import SimpleNamespace as Namespace
 
-import smpl.defaults as Defaults
-import smpl.util as util
 import smpl.object as Object
 
 #
@@ -70,9 +68,17 @@ class PackageParms:
             raise ValueError("dependency entry from config file name: {} does not have a version".format(self.name))
         self.__dict__ = dict_data
 
+class FileNameConstants:
+    vendor_dir_name = "vendor"
+    external_src_dir_name = "external_src"
+    clone_dir_name = "clone"
+    stage_dir_name = "stage"
+    smpl_cache_dir_name = ".smpl_cache"
+
+
 # Config object holds an amalganation of all the data from config_file and
 # cli args/options + a number of file path values derived from the config/arg
-# data
+# data.
 class ConfigObject:
 
     # get the parameters for a specific package that are in the dependecies field
@@ -103,18 +109,24 @@ class ConfigObject:
         else:
             self.project_dir = m.project_dir
 
-        self.external_name = "external_src"
-        self.vendor_name = "vendor"
-        self.scripts_name = "scripts"
-        self.clone_name = "clone"
-        self.stage_name = "stage"
-        self.clone_dir = os.path.join(self.project_dir, self.scripts_name, self.clone_name)
-        self.stage_dir = os.path.join(self.project_dir, self.scripts_name, self.stage_name)
-        self.unpack_dir = os.path.join(self.project_dir, self.scripts_name, self.clone_name)
-        self.source_dir = os.path.join(self.project_dir, self.project_name)
-        self.external_dir = os.path.join(self.project_dir, self.project_name, self.vendor_name, "src")
-        self.vendor_dir = os.path.join(self.project_dir, self.vendor_name)
-        self.dependencies = {}
+        # self.external_name = FileNameConstants.external_src_dir_name
+        # self.vendor_name = FileNameConstants.vendor_dir_name
+        # self.scripts_name = FileNameConstants.smpl_cache_dir_name
+        # self.clone_name = FileNameConstants.clone_dir_name
+        # self.stage_name = FileNameConstants.stage_dir_name
+
+        # self.cache_dir = os.path.join(self.project_dir, FileNameConstants.smpl_cache_dir_name)
+        # self.clone_dir = os.path.join(self.cache_dir, FileNameConstants.clone_dir_name)
+        # self.stage_dir = os.path.join(self.cache_dir, FileNameConstants.stage_dir_name)
+        #
+        # self.vendor_dir = os.path.join(self.project_dir, FileNameConstants.vendor_dir_name)
+        #
+        # self.external_dir = os.path.join(self.vendor_dir, "src")
+        #
+        # self.unpack_dir = os.path.join(self.project_dir, FileNameConstants.smpl_cache_dir_name,
+        # FileNameConstants.clone_dir_name)
+        #
+        # self.dependencies = {}
 
         a = self.project_name.lower()
         b = os.path.basename(self.project_dir).lower()
@@ -137,27 +149,32 @@ class ConfigObject:
                 self.source_dir, self.project_dir))
             exit()
 
-        self.script_dir = os.path.join(self.project_dir, 'scripts')
+        # set the cache dir path - for the moment this cannot be overridden in the config file
+        self.cache_dir = os.path.join(self.project_dir, FileNameConstants.smpl_cache_dir_name)
+
+        self.clone_dir = os.path.join(self.cache_dir, FileNameConstants.clone_dir_name)
         if hasattr(m, 'clone_dir_path') and m.clone_dir_path:
             self.clone_dir = os.path.abspath(m.clone_dir_path)
-        else:
-            self.clone_dir = os.path.join(self.script_dir, 'clone')
 
+        self.stage_dir = os.path.join(self.cache_dir, FileNameConstants.stage_dir_name)
         if hasattr(m, 'stage_dir_path') and m.stage_dir_path:
             self.stage_dir = os.path.abspath(m.stage_dir_path)
-        else:
-            self.stage_dir = os.path.join(self.script_dir, 'stage')
+        self.stage_include_dir = os.path.join(self.stage_dir, "include")
+        self.stage_lib_dir = os.path.join(self.stage_dir, "lib")
+        self.stage_src_dir = os.path.join(self.stage_dir, "src")
 
+        self.vendor_dir = os.path.join(self.project_dir, FileNameConstants.vendor_dir_name)
         if hasattr(m, 'vendor_dir_path') and m.vendor_dir_path:
             self.vendor_dir = os.path.abspath(m.vendor_dir_path)
-        else:
-            self.vendor_dir = os.path.join(self.project_dir, 'vendor')
+        self.vendor_include_dir = os.path.join(self.vendor_dir, "include")
+        self.vendor_lib_dir = os.path.join(self.vendor_dir, "lib")
+        self.vendor_src_dir = os.path.join(self.vendor_dir, "src")
 
+        self.external_dir = os.path.join(self.vendor_dir, "src")
         if hasattr(m, 'external_dir_path') and m.external_dir_path:
             self.external_dir = os.path.abspath(m.external_dir_path)
-        else:
-            self.external_dir = os.path.join(self.vendor_dir, 'src')
 
+        self.dependencies = {}
         for d in m.dependencies:
             x = d.__dict__
             if not hasattr(d, "name"):

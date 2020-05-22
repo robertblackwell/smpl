@@ -1,146 +1,4 @@
 import argparse
-import pprint
-import os
-import json
-from typing import Any
-
-import yaml
-from types import SimpleNamespace as Namespace
-
-from .boost import Boost
-from .openssl import OpenSSL
-from .cert_lib import CertLib
-from .simple_buffer import SimpleBuffer
-from .trog import Trog
-from .http_parser import HttpParser
-from .nodejs_http_parser import NodeJsHttpParser
-from .uri_parser import UriParser
-from .cxxurl import CxxUrl
-from .catch2 import Catch2
-from .nlohmann_json import NLohmannJson
-from .doctest import Doctest
-
-import smpl.defaults as Defaults
-import smpl.util as util
-import smpl.object as Object
-
-pp = pprint.PrettyPrinter(indent=4)
-
-project_name = "marvin++"
-
-__version__ = "0.3.5"
-
-debug = True
-logfile = False
-
-
-def is_comment_line(line: str) -> bool:
-    for ch in line:
-        if ch == "#":
-            return True
-    return False
-
-
-def file_get_contents(file_name: str) -> str:
-    data = ""
-    with open(file_name, 'r') as file:
-        #     for line in enumerate(file):
-        #         if not isCommentLine(line):
-        #             data += line
-        # return data
-        data = file.read()
-    return data
-
-
-def get_config(file_name: str) -> Any:
-    """ 
-    # reads either a json or yaml file to get part of the config
-    # @param string file_name Path for config file
-    # @return an object
-    """
-    ext = os.path.splitext(file_name)[1]
-    if ext == ".json":
-        d = file_get_contents(file_name)
-        jdata = json.loads(d, object_hook=lambda d: Namespace(**d))
-    elif ext == ".yaml":
-        with open(file_name) as f:
-            data = yaml.load(f, Loader=yaml.CLoader)
-            # // we are required to return an object and yaml gives us a dctionary
-            obj = Object.parse_to_object(data)
-
-            return obj
-    else:
-        raise ValueError("unknown file extension on config file {}".format(ext))
-    return jdata
-
-
-def create_clean_install_dirs(defaults: Defaults) -> None:
-    util.clear_directory(defaults.clone_dir)
-    util.clear_directory(defaults.stage_dir)
-    util.clear_directory(os.path.join(defaults.vendor_dir, "include"))
-    util.clear_directory(os.path.join(defaults.vendor_dir, "lib"))
-    util.clear_directory(os.path.join(defaults.vendor_dir, "ssl"))
-
-
-def clean_only(defaults: Defaults) -> None:
-    """
-    removes all directories used during installation, Would neeed to do this to clean up
-    prior ro changing the names and locations of some of the install locations 
-    """
-    util.rm_directory(defaults.clone_dir)
-    util.rm_directory(defaults.stage_dir)
-    util.rm_directory(os.path.join(defaults.vendor_dir))
-
-
-def action(name: str, parms: Any, defaults: Defaults) -> None:
-    print("installing: %s %s " % (name, parms))
-    if name == "boost":
-        handler = Boost(name, parms, defaults)
-    elif name == "openssl":
-        handler = OpenSSL(name, parms, defaults)
-    elif name == "cert_lib":
-        handler = CertLib(name, parms, defaults)
-    elif name == "simple_buffer":
-        handler = SimpleBuffer(name, parms, defaults)
-    elif name == "trog":
-        handler = Trog(name, parms, defaults)
-    elif name == "http_parser":
-        handler = HttpParser(name, parms, defaults)
-    elif name == "nodejs_http_parser":
-        handler = NodeJsHttpParser(name, parms, defaults)
-    elif name == "uri-parser":
-        handler = UriParser(name, parms, defaults)
-    elif name == "cxxurl":
-        handler = CxxUrl(name, parms, defaults)
-    elif name == "catch2":
-        handler = Catch2(name, parms, defaults)
-    elif name == "doctest":
-        handler = Doctest(name, parms, defaults)
-    elif name == "nlohmann_json":
-        handler = NLohmannJson(name, parms, defaults)
-    else:
-        raise ValueError("invalid action name={}".format(name))
-
-    handler.get_package()
-    handler.stage_package()
-    handler.install_package()
-
-
-def download_action(args, dependencies, defaults: Defaults):
-    pprint.pprint(args)
-
-
-def build_action(args, dependencies, defaults: Defaults):
-    pprint.pprint(args)
-
-
-def install_action(args, dependencies, defaults: Defaults):
-    pprint.pprint(args)
-
-
-def clean_action(args, dependencies, defaults: Defaults):
-    pprint.pprint(args)
-
 
 #
 # define global argument and options
@@ -219,24 +77,24 @@ def define_subcommands(parser: argparse.ArgumentParser) -> None:
     #
     # vendor subcommand
     #
-    parser_vendor = subparsers.add_parser(name="vendor",
+    parser_vendor = subparsers.add_parser(name="install",
                                           help="copy the exportable files of one dependency (name provided as arg)"
                                                "or all dependencies into the vendor directory")
     parser_vendor.add_argument('subcmd_arg', nargs="?", type=str,
                                help='optional - a name of a dependency, if ommited means all')
-    parser_vendor.set_defaults(subcmd="vendor")
+    parser_vendor.set_defaults(subcmd="install")
 
     #
     # install subcommand
     #
-    parser_install = subparsers.add_parser(name="install",
+    parser_install = subparsers.add_parser(name="all",
                                            help="download, build and copy to vendor either a single "
                                                 "dependency (name provided as arg) or all dependencies"
                                                 " if no arg provided")
     parser_install.add_argument('subcmd_arg', nargs="?", type=str, help='optional - a name of a dependency, '
                                                                         'if ommited means all')
     # parser_install.set_defaults(parser_install=True)
-    parser_install.set_defaults(subcmd="install")
+    parser_install.set_defaults(subcmd="all")
 
     #
     # clean subcommand
@@ -264,46 +122,3 @@ def define_cli_interface() -> argparse.ArgumentParser:
     define_global_args(parser)
     define_subcommands(parser)
     return parser
-
-#
-# def main():
-#     parser = argparse.ArgumentParser(
-#         description="Install dependencies for project.")
-#     parser.add_argument('-v', '--version', action="store_true",
-#                         help="Prints the version number.")
-#     define_global_args(parser)
-#     define_subcommands(parser)
-#
-#     args = parser.parse_args()
-#     pprint.pprint(args)
-#     args.func(args)
-#
-#     config = ""  # if args.config_file_path is None else get_config(args.config_file_path)
-#     if args.config_file_path is None:
-#         config = get_config("./smpl.json")
-#     else:
-#         config = get_config(args.config_file_path)
-#
-#     if args.log_actions:
-#         if args.log_path is None:
-#             action_log_path = os.path.abspath("./action_log.log")
-#         else:
-#             action_log_path = args.log_path
-#
-#         util.set_log_file(action_log_path)
-#
-#     dependencies = config.dependencies
-#     m = Object.merge_objects(config, args)
-#     defaults: Defaults = Defaults.validate_and_construct_names(m)
-#     if args.clean_before_flag:
-#         create_clean_install_dirs(defaults)
-#
-#     if args.clean_only_flag:
-#         clean_only(defaults)
-#     else:
-#         for d in dependencies:
-#             action(d.name, d.parms, defaults)
-#
-#
-# if __name__ == "__main__":
-#     main()

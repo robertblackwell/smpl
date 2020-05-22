@@ -41,17 +41,20 @@ class PackageBase(object):
 
         self.version_in_configfile = self.parms.version
         self.version = self.version_in_configfile
-        self.defaults = cfg_obj
+        self.cfg_obj = cfg_obj
         self.package_name = package_name
 
+        # these will be set by the package specific derived class
         self.release = None
         self.git_url = None
         self.package_url = None
-        self.package_clone_dir_path = os.path.join(self.defaults.clone_dir, package_name)
-        self.stage_include_dir_path = os.path.join(self.defaults.script_dir, "stage", "include")
-        self.stage_lib_dir_path = os.path.join(self.defaults.script_dir, "stage", "lib")
-        self.vendor_include_dir_path = os.path.join(self.defaults.vendor_dir, "include")
-        self.vendor_lib_dir_path = os.path.join(self.defaults.vendor_dir, "lib")
+        #  this nmay not be correct package "name" versus "package_name" is a bit of a mess
+        self.package_clone_dir_path = os.path.join(cfg_obj.clone_dir, package_name)
+        # straight redundant data
+        self.stage_include_dir_path = cfg_obj.stage_include_dir
+        self.stage_lib_dir_path = cfg_obj.stage_lib_dir
+        self.vendor_include_dir_path = cfg_obj.vendor_include_dir
+        self.vendor_lib_dir_path = cfg_obj.vendor_lib_dir
 
         self.package_stage_include_dir_path = os.path.join(self.stage_include_dir_path, package_name)
         self.package_vendor_include_dir_path = os.path.join(self.vendor_include_dir_path, package_name)
@@ -74,19 +77,19 @@ class PackageBase(object):
     # """
     def get_git_repo(self, repo_url: str, repo_name: str, branch_argument=None):
 
-        package_clone_dir = os.path.join(self.defaults.clone_dir, repo_name)
+        package_clone_dir = os.path.join(self.cfg_obj.clone_dir, repo_name)
         util.rm_directory(package_clone_dir)
-        util.git_clone(self.git_url, self.defaults.clone_dir, branch_argument)
+        util.git_clone(self.git_url, self.cfg_obj.clone_dir, branch_argument)
         util.list_directory(package_clone_dir)
 
     def get_and_unpack_tar(self, tar_url, tar_file_name, tar_unpacked_name):
-        package_clone_dir = os.path.join(self.defaults.clone_dir, tar_unpacked_name)
+        package_clone_dir = os.path.join(self.cfg_obj.clone_dir, tar_unpacked_name)
         util.rm_directory(package_clone_dir)
-        tar_file_path = os.path.join(self.defaults.clone_dir, tar_file_name)
+        tar_file_path = os.path.join(self.cfg_obj.clone_dir, tar_file_name)
         util.rm_file(tar_file_path)
         util.run(["wget", "-O", tar_file_path, tar_url])
-        util.run(["tar", "-xvzf", tar_file_path, "-C", self.defaults.clone_dir])
-        util.list_directory(self.defaults.clone_dir)
+        util.run(["tar", "-xvzf", tar_file_path, "-C", self.cfg_obj.clone_dir])
+        util.list_directory(self.cfg_obj.clone_dir)
         util.list_directory(package_clone_dir)
 
     def headers_from_stage_to_vendor(self, stage_name, vendor_name):
@@ -213,9 +216,9 @@ class HeadersOnlyPackage(PackageBase):
     def stage_headers_only_from_repo(self, repo_name, stage_name, repo_sub_directory=None):
         to_dir = os.path.join(self.stage_include_dir_path, stage_name)
         if repo_sub_directory is None:
-            from_dir = os.path.join(self.defaults.clone_dir, repo_name)
+            from_dir = os.path.join(self.cfg_obj.clone_dir, repo_name)
         else:
-            from_dir = os.path.join(self.defaults.clone_dir, repo_name, repo_sub_directory)
+            from_dir = os.path.join(self.cfg_obj.clone_dir, repo_name, repo_sub_directory)
         util.clear_directory(to_dir)
         util.cp_directory_contents(from_dir, to_dir)
         util.list_directory(to_dir)
@@ -254,10 +257,10 @@ class SourcePackage(PackageBase):
     def __init__(self, package_name, cfg_obj: cfg.ConfigObject):
         super().__init__(package_name, cfg_obj)
         # print("SourcePackage")
-        self.stage_external_src_dir_path = os.path.join(self.defaults.stage_dir, "external_src")
+        self.stage_external_src_dir_path = os.path.join(self.cfg_obj.stage_dir, "external_src")
         self.package_stage_external_src_dir_path = os.path.join(self.stage_external_src_dir_path, self.package_name)
-        self.package_external_src_dir_path = os.path.join(self.defaults.source_dir, "external_src", self.package_name)
-        self.project_external_src_dir_path = self.defaults.external_dir
+        self.package_external_src_dir_path = os.path.join(self.cfg_obj.source_dir, "external_src", self.package_name)
+        self.project_external_src_dir_path = self.cfg_obj.external_dir
 
     #
     # copy the header and source files for a source package from their location in the clone
@@ -272,9 +275,9 @@ class SourcePackage(PackageBase):
 
         to_dir = os.path.join(self.stage_external_src_dir_path, stage_name)
         if repo_sub_directory is None:
-            from_dir = os.path.join(self.defaults.clone_dir, repo_name)
+            from_dir = os.path.join(self.cfg_obj.clone_dir, repo_name)
         else:
-            from_dir = os.path.join(self.defaults.clone_dir, repo_name, repo_sub_directory)
+            from_dir = os.path.join(self.cfg_obj.clone_dir, repo_name, repo_sub_directory)
         util.clear_directory(to_dir)
         util.cp_directory_contents(from_dir, to_dir)
         util.list_directory(to_dir)

@@ -2,7 +2,8 @@ import os
 import smpl.util as util
 import platform
 import re
-from .package import LibraryPackage
+from smpl.package import LibraryPackage
+from smpl.config_file import ConfigObject, PackageParms
 
 package_name = "openssl"
 openssl_name = "openssl-1.1.1f"
@@ -13,18 +14,18 @@ package_targz_file = "tar xvzf {}.tar.gz".format(openssl_name)
 
 
 class OpenSSL(LibraryPackage):
-    def __init__(self, name, parms, the_defaults):
-        super().__init__(package_name, the_defaults)
+    def __init__(self, name, parms: PackageParms, cfg_obj: ConfigObject):
+        super().__init__(package_name, cfg_obj)
         self.name = name
         self.parms = parms
         self.release = "1.1.1f"
         self.package_url = "https://www.openssl.org/source/{}.tar.gz".format(openssl_name)
 
-        self.package_targz_file_path = os.path.join(self.defaults.clone_dir, package_targz_file)
-        self.wget_output_path = self.defaults.clone_dir
-        self.package_targz_file_path = os.path.join(self.defaults.clone_dir, package_targz_file)
-        self.vendor_ssl_dir = os.path.join(self.defaults.vendor_dir, "ssl")
-        self.package_clone_dir_versioned_path = os.path.join(self.defaults.clone_dir, "openssl-1.1.1f")
+        self.package_targz_file_path = os.path.join(self.cfg_obj.clone_dir, package_targz_file)
+        self.wget_output_path = self.cfg_obj.clone_dir
+        self.package_targz_file_path = os.path.join(self.cfg_obj.clone_dir, package_targz_file)
+        self.vendor_ssl_dir = os.path.join(self.cfg_obj.vendor_dir, "ssl")
+        self.package_clone_dir_versioned_path = os.path.join(self.cfg_obj.clone_dir, "openssl-1.1.1f")
 
     def get_package(self):
         self.get_and_unpack_tar(package_url, package_targz_file, openssl_name)
@@ -42,7 +43,7 @@ class OpenSSL(LibraryPackage):
         else:
             raise RuntimeError("could not determine platform type for openssl build options - platform is: {}".format(sys_desc))
         util.run(["./Configure",
-                  "--prefix={}".format(self.defaults.stage_dir),
+                  "--prefix={}".format(self.cfg_obj.stage_dir),
                   "--openssldir={}".format(self.vendor_ssl_dir),
                   "--debug",
                   arch_arg,

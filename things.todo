@@ -1,5 +1,6 @@
 Problems:
  ☐ does not handle architecture in the openssl build - needs to be included in a way that is visible to maintenance
+ ☐ Trog is now a header onle library not external_src
 
 Possible enhancements:
   ☐ introduce new exec_cmd using Popen so as to stream stdout while command is running.
