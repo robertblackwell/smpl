@@ -1,5 +1,7 @@
 import os
 import smpl.util as util
+import platform
+import re
 from .package import LibraryPackage
 
 package_name = "openssl"
@@ -31,12 +33,20 @@ class OpenSSL(LibraryPackage):
         util.clear_directory(self.package_stage_include_dir_path)
         util.rm_file("{}/libcrypto.a".format(self.stage_lib_dir_path))
         util.rm_file("{}/libssl.a".format(self.stage_lib_dir_path))
-
+        sys_desc = platform.platform()
+        if re.search('Linux', sys_desc) is not None \
+                and re.search('x86_64', sys_desc) is not None:
+            arch_arg = "linux-x86_64"
+        elif re.search('Darwin', sys_desc) is not None:
+            arch_arg = "darwin64-x86_64-cc"
+        else:
+            raise RuntimeError("could not determine platform type for openssl build options - platform is: {}".format(sys_desc))
         util.run(["./Configure",
                   "--prefix={}".format(self.defaults.stage_dir),
                   "--openssldir={}".format(self.vendor_ssl_dir),
                   "--debug",
-                  "linux-x86_64"
+                  arch_arg,
+                  # "linux-x86_64"
                   # "darwin64-x86_64-cc"
                   ],
                  self.package_clone_dir_versioned_path)
