@@ -15,7 +15,7 @@ logfile = False
 
 
 def main():
-    __version__ = "0.4.0"
+    __version__ = "0.5.0"
     parser = cli_interface.define_cli_interface()
 
     args = parser.parse_args()
