@@ -3,8 +3,11 @@ import json
 import datetime
 import pprint
 import os
+from typing import Union, List, NamedTuple
 
-import smpl.util as util 
+import smpl.util as util
+import smpl.config_file as cfg
+
 
 # """
 # PackageBase
@@ -31,75 +34,84 @@ import smpl.util as util
 # 
 # """
 class PackageBase(object):
-	def __init__(self, package_name, the_defaults):
-		self.defaults = the_defaults
-		self.package_name = package_name
-		self.release = None
-		self.git_url = None
-		self.package_url = None
-		self.package_clone_dir_path = os.path.join(self.defaults.clone_dir, package_name)
-		self.stage_include_dir_path = os.path.join(self.defaults.script_dir, "stage", "include")
-		self.stage_lib_dir_path = os.path.join(self.defaults.script_dir, "stage", "lib")
-		self.vendor_include_dir_path = os.path.join(self.defaults.vendor_dir, "include")
-		self.vendor_lib_dir_path = os.path.join(self.defaults.vendor_dir, "lib")
+    def __init__(self, package_name, cfg_obj: cfg.ConfigObject):
+        self.parms = cfg_obj.package_parms(package_name)
+        if not hasattr(self.parms, 'version'):
+            raise ValueError("package name {} does not specify a version ".format(package_name))
 
-		self.package_stage_include_dir_path = os.path.join(self.stage_include_dir_path, package_name)
-		self.package_vendor_include_dir_path = os.path.join(self.vendor_include_dir_path, package_name)
+        self.version_in_configfile = self.parms.version
+        self.version = self.version_in_configfile
+        self.defaults = cfg_obj
+        self.package_name = package_name
 
-	def list_package(self) -> str:
-		return "{:21} release: {:11}  url: {}".format(
-			self.package_name[0:19],
-			self.release[0:9] if self.release is not None else "",
-			self.git_url if self.git_url is not None else self.package_url )
+        self.release = None
+        self.git_url = None
+        self.package_url = None
+        self.package_clone_dir_path = os.path.join(self.defaults.clone_dir, package_name)
+        self.stage_include_dir_path = os.path.join(self.defaults.script_dir, "stage", "include")
+        self.stage_lib_dir_path = os.path.join(self.defaults.script_dir, "stage", "lib")
+        self.vendor_include_dir_path = os.path.join(self.defaults.vendor_dir, "include")
+        self.vendor_lib_dir_path = os.path.join(self.defaults.vendor_dir, "lib")
 
-	# """
-	# repo_url: 	is something like git@github.com:robertblackwell/x509_certificate_library
-	# 				or fil:///home/robert/git-repos/x509_certificate_library
-	# 
-	# repo_name: 	is the x509_certificate_library part of the url. Passed separately so that this
-	# 				function knows the name of the directory created by a git clone command
-	# 
-	# branch_argument: allows the cloning of a spcecific branch or tag.	
-	# """
-	def get_git_repo(self, repo_url: str, repo_name: str, branch_argument=None):
+        self.package_stage_include_dir_path = os.path.join(self.stage_include_dir_path, package_name)
+        self.package_vendor_include_dir_path = os.path.join(self.vendor_include_dir_path, package_name)
 
-		package_clone_dir = os.path.join(self.defaults.clone_dir, repo_name)
-		util.rm_directory(package_clone_dir)
-		util.git_clone(self.git_url, self.defaults.clone_dir, branch_argument)
-		util.list_directory(package_clone_dir)
+    def list_package(self) -> str:
+        return "{:21} release: {:11} version: {:11}  url: {}".format(
+            self.package_name[0:19],
+            self.release[0:9] if self.release is not None else "",
+            self.version[0:9],
+            self.git_url if self.git_url is not None else self.package_url)
 
-	def get_and_unpack_tar(self, tar_url, tar_file_name, tar_unpacked_name):
-		package_clone_dir = os.path.join(self.defaults.clone_dir, tar_unpacked_name)
-		util.rm_directory(package_clone_dir)
-		tar_file_path = os.path.join(self.defaults.clone_dir, tar_file_name)
-		util.rm_file(tar_file_path)
-		util.run(["wget", "-O", tar_file_path, tar_url])
-		util.run(["tar", "-xvzf", tar_file_path, "-C", self.defaults.clone_dir])
-		util.list_directory(self.defaults.clone_dir)
-		util.list_directory(package_clone_dir)
+    # """
+    # repo_url: 	is something like git@github.com:robertblackwell/x509_certificate_library
+    # 				or fil:///home/robert/git-repos/x509_certificate_library
+    #
+    # repo_name: 	is the x509_certificate_library part of the url. Passed separately so that this
+    # 				function knows the name of the directory created by a git clone command
+    #
+    # branch_argument: allows the cloning of a spcecific branch or tag.
+    # """
+    def get_git_repo(self, repo_url: str, repo_name: str, branch_argument=None):
 
-	def headers_from_stage_to_vendor(self, stage_name, vendor_name):
-		"""
-		Empties vendor/include/vendor_name
-		and then
-		Copies header files from stage/include/stage_name to vendor/include/vendor_name
-		"""
-		from_dir = os.path.join(self.stage_include_dir_path, stage_name)
-		to_dir = os.path.join(self.vendor_include_dir_path, vendor_name)
-		util.clear_directory(to_dir)
-		util.cp_directory_contents(from_dir, to_dir)
+        package_clone_dir = os.path.join(self.defaults.clone_dir, repo_name)
+        util.rm_directory(package_clone_dir)
+        util.git_clone(self.git_url, self.defaults.clone_dir, branch_argument)
+        util.list_directory(package_clone_dir)
 
-	def libs_from_stage_to_vendor(self, lib_pattern):
-		"""
-		Removes all files matching lib_pattern from vendor/lib
-		and then
-		copies lib files matching lib_patterm from from stage/lib to vendor/lib
-		"""
-		from_dir = self.stage_lib_dir_path
-		to_dir = self.vendor_lib_dir_path
-		util.rm_directory_contents(to_dir, lib_pattern)
-		util.cp_directory_files(from_dir, to_dir, lib_pattern)
-		util.list_directory(to_dir)
+    def get_and_unpack_tar(self, tar_url, tar_file_name, tar_unpacked_name):
+        package_clone_dir = os.path.join(self.defaults.clone_dir, tar_unpacked_name)
+        util.rm_directory(package_clone_dir)
+        tar_file_path = os.path.join(self.defaults.clone_dir, tar_file_name)
+        util.rm_file(tar_file_path)
+        util.run(["wget", "-O", tar_file_path, tar_url])
+        util.run(["tar", "-xvzf", tar_file_path, "-C", self.defaults.clone_dir])
+        util.list_directory(self.defaults.clone_dir)
+        util.list_directory(package_clone_dir)
+
+    def headers_from_stage_to_vendor(self, stage_name, vendor_name):
+        """
+        Empties vendor/include/vendor_name
+        and then
+        Copies header files from stage/include/stage_name to vendor/include/vendor_name
+        """
+        from_dir = os.path.join(self.stage_include_dir_path, stage_name)
+        to_dir = os.path.join(self.vendor_include_dir_path, vendor_name)
+        util.clear_directory(to_dir)
+        util.cp_directory_contents(from_dir, to_dir)
+
+    def libs_from_stage_to_vendor(self, lib_pattern):
+        """
+        Removes all files matching lib_pattern from vendor/lib
+        and then
+        copies lib files matching lib_patterm from from stage/lib to vendor/lib
+        """
+        from_dir = self.stage_lib_dir_path
+        to_dir = self.vendor_lib_dir_path
+        util.rm_directory_contents(to_dir, lib_pattern)
+        util.cp_directory_files(from_dir, to_dir, lib_pattern)
+        util.list_directory(to_dir)
+
 
 # """
 # 
@@ -151,8 +163,9 @@ class PackageBase(object):
 # """
 class LibraryPackage(PackageBase):
 
-	def __init__(self, package_name, the_defaults):
-		super().__init__(package_name, the_defaults)
+    def __init__(self, package_name, cfg_obj: cfg.ConfigObject):
+        super().__init__(package_name, cfg_obj)
+
 
 # """
 # 
@@ -178,32 +191,34 @@ class LibraryPackage(PackageBase):
 # 
 # """
 class HeadersOnlyPackage(PackageBase):
-	"""
-	This is silly python comment
-	"""
-	def __init__(self, package_name, the_defaults):
-		super().__init__(package_name, the_defaults)
-		# print("HeaderOnlyPackage")
-	
-	# """
-	# copy the header files for a headers only package from their location in the clone
-	# directory into the stage/include/package_name directory
-	#	 
-	# repo_name: is the name of the sub-dir of clone_dir that holds the repo
-	# stage_name: the subdir of stage/include where the headers are to go
-	# pattern: a regex pattern selecting only some headers files
-	# repo_sub_directory: in some cases the required headers are in a sub-dir of the repo directory
-	# 
-	# """
-	def stage_headers_only_from_repo(self, repo_name, stage_name, repo_sub_directory=None):
-		to_dir = os.path.join(self.stage_include_dir_path, stage_name)
-		if repo_sub_directory is None:
-			from_dir = os.path.join(self.defaults.clone_dir, repo_name)
-		else:
-			from_dir = os.path.join(self.defaults.clone_dir, repo_name, repo_sub_directory)
-		util.clear_directory(to_dir)
-		util.cp_directory_contents(from_dir, to_dir)
-		util.list_directory(to_dir)
+    """
+    This is silly python comment
+    """
+
+    def __init__(self, package_name, cfg_obj: cfg.ConfigObject):
+        super().__init__(package_name, cfg_obj)
+
+    # print("HeaderOnlyPackage")
+
+    # """
+    # copy the header files for a headers only package from their location in the clone
+    # directory into the stage/include/package_name directory
+    #
+    # repo_name: is the name of the sub-dir of clone_dir that holds the repo
+    # stage_name: the subdir of stage/include where the headers are to go
+    # pattern: a regex pattern selecting only some headers files
+    # repo_sub_directory: in some cases the required headers are in a sub-dir of the repo directory
+    #
+    # """
+    def stage_headers_only_from_repo(self, repo_name, stage_name, repo_sub_directory=None):
+        to_dir = os.path.join(self.stage_include_dir_path, stage_name)
+        if repo_sub_directory is None:
+            from_dir = os.path.join(self.defaults.clone_dir, repo_name)
+        else:
+            from_dir = os.path.join(self.defaults.clone_dir, repo_name, repo_sub_directory)
+        util.clear_directory(to_dir)
+        util.cp_directory_contents(from_dir, to_dir)
+        util.list_directory(to_dir)
 
 
 # """
@@ -236,43 +251,42 @@ class HeadersOnlyPackage(PackageBase):
 # 
 # """
 class SourcePackage(PackageBase):
-	def __init__(self, package_name, the_defaults):
-		super().__init__(package_name, the_defaults)
-		# print("SourcePackage")
-		self.stage_external_src_dir_path = os.path.join(self.defaults.stage_dir,"external_src")
-		self.package_stage_external_src_dir_path = os.path.join(self.stage_external_src_dir_path, self.package_name)
-		self.package_external_src_dir_path = os.path.join(self.defaults.source_dir, "external_src", self.package_name)
-		self.project_external_src_dir_path = self.defaults.external_dir
-	# 
-	# copy the header and source files for a source package from their location in the clone
-	# directory into the stage/external/package_name directory
-	#	 
-	# repo_name: is the name of the sub-dir of clone_dir that holds the repo
-	# stage_name: the subdir of stage/external where the headers+source are to go
-	# pattern: a regex pattern selecting only some headers+source files
-	# repo_sub_directory: in some cases the required headers+source are in a sub-dir of the repo directory
-	# 
-	def stage_source(self, repo_name, stage_name, repo_sub_directory=None):
+    def __init__(self, package_name, cfg_obj: cfg.ConfigObject):
+        super().__init__(package_name, cfg_obj)
+        # print("SourcePackage")
+        self.stage_external_src_dir_path = os.path.join(self.defaults.stage_dir, "external_src")
+        self.package_stage_external_src_dir_path = os.path.join(self.stage_external_src_dir_path, self.package_name)
+        self.package_external_src_dir_path = os.path.join(self.defaults.source_dir, "external_src", self.package_name)
+        self.project_external_src_dir_path = self.defaults.external_dir
 
-		to_dir = os.path.join(self.stage_external_src_dir_path, stage_name)
-		if repo_sub_directory is None:
-			from_dir = os.path.join(self.defaults.clone_dir, repo_name)
-		else:
-			from_dir = os.path.join(self.defaults.clone_dir, repo_name, repo_sub_directory)
-		util.clear_directory(to_dir)
-		util.cp_directory_contents(from_dir, to_dir)
-		util.list_directory(to_dir)
+    #
+    # copy the header and source files for a source package from their location in the clone
+    # directory into the stage/external/package_name directory
+    #
+    # repo_name: is the name of the sub-dir of clone_dir that holds the repo
+    # stage_name: the subdir of stage/external where the headers+source are to go
+    # pattern: a regex pattern selecting only some headers+source files
+    # repo_sub_directory: in some cases the required headers+source are in a sub-dir of the repo directory
+    #
+    def stage_source(self, repo_name, stage_name, repo_sub_directory=None):
 
-	def install_stage_to_project(self, stage_name, source_name):
-		"""
-		Empties project_source/external_src/source_name
-		and then
-		Copies header+source files from stage/external/stage_name to project_sourcer/external_src/source_name
-		"""
-		from_dir = os.path.join(self.stage_external_src_dir_path, stage_name)
-		to_dir = os.path.join(self.project_external_src_dir_path, source_name)
-		util.clear_directory(to_dir)
-		util.cp_directory_contents(from_dir, to_dir)
-		util.list_directory(to_dir)
+        to_dir = os.path.join(self.stage_external_src_dir_path, stage_name)
+        if repo_sub_directory is None:
+            from_dir = os.path.join(self.defaults.clone_dir, repo_name)
+        else:
+            from_dir = os.path.join(self.defaults.clone_dir, repo_name, repo_sub_directory)
+        util.clear_directory(to_dir)
+        util.cp_directory_contents(from_dir, to_dir)
+        util.list_directory(to_dir)
 
-
+    def install_stage_to_project(self, stage_name, source_name):
+        """
+        Empties project_source/external_src/source_name
+        and then
+        Copies header+source files from stage/external/stage_name to project_sourcer/external_src/source_name
+        """
+        from_dir = os.path.join(self.stage_external_src_dir_path, stage_name)
+        to_dir = os.path.join(self.project_external_src_dir_path, source_name)
+        util.clear_directory(to_dir)
+        util.cp_directory_contents(from_dir, to_dir)
+        util.list_directory(to_dir)

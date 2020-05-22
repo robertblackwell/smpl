@@ -20,7 +20,7 @@ class Doctest(HeadersOnlyPackage):
         self.cp_from_here_dir = os.path.join(self.package_clone_dir_path, "doctest")
 
     def get_package(self):
-        self.get_git_repo(self.git_url, "doctest", "2.3.7")
+        self.get_git_repo(self.git_url, "doctest", self.git_branch_arg)
 
     def stage_package(self):
         self.stage_headers_only_from_repo(repo_name="doctest", stage_name="doctest", repo_sub_directory="doctest")

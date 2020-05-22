@@ -10,8 +10,9 @@ class NLohmannJson(HeadersOnlyPackage):
         self.name = name
         self.package_clone_dir_path = os.path.join(self.defaults.clone_dir, "json")
         self.parms = parms
+        self.release = "v3.7.3"
         self.git_url = "https://github.com/nlohmann/json.git"
-        self.git_branch_arg = None
+        self.git_branch_arg = self.release
         self.single_include_dir = os.path.join(self.package_clone_dir_path, "single_include", "nlohmann")
         self.package_clone_dir_path = os.path.join(self.defaults.clone_dir, "json")
         self.package_stage_include_dir_path = os.path.join(self.defaults.stage_dir, "include", "json")

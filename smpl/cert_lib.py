@@ -7,16 +7,16 @@ class CertLib(LibraryPackage):
         super().__init__(name, the_defaults)
         self.name = name
         self.parms = parms
-        self.release = ""
+        self.release = "v0.1.0"
         self.git_url = "https://github.com/robertblackwell/x509_certificate_library.git"
         self.package_clone_dir_path = os.path.join(self.defaults.clone_dir, "x509_certificate_library")
-        self.git_branch_arg = None
+        self.git_branch_arg = self.release
         self.package_stage_include_dir_path = os.path.join(self.defaults.stage_dir, "include", "cert")
         self.package_vendor_include_dir_path = os.path.join(self.defaults.vendor_dir, "include", "cert")
         self.cmake_dir = os.path.join(self.package_clone_dir_path, "cmake-build-debug")
 
     def get_package(self):
-        self.get_git_repo(self.git_url, "x509_certificate_library")
+        self.get_git_repo(self.git_url, "x509_certificate_library", self.git_branch_arg)
 
     def stage_package(self):
         util.mkdir_p(self.stage_include_dir_path)

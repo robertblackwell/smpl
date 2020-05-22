@@ -59,12 +59,12 @@ logfile = False
 #
 
 def main():
-    version = "0.2.0"
+    __version__ = "0.2.0"
     parser = cli_interface.define_cli_interface()
 
     args = parser.parse_args()
-    if args.version is not None:
-        print(version)
+    if args.version:
+        print(__version__)
         sys.exit(0)
 
     cfg_obj: configuration.ConfigObject = configuration.ConfigObject(args)

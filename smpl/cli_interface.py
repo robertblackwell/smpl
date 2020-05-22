@@ -160,8 +160,8 @@ def define_global_args(parser: argparse.ArgumentParser) -> None:
                              'same as basename '
                              'of cwd. ')
 
-    parser.add_argument('--clean-before', dest='clean_before_flag', action='store_true',
-                        help='Clean vendor, stage clone directories before starting install ')
+    # parser.add_argument('--clean-before', dest='clean_before_flag', action='store_true',
+    #                     help='Clean vendor, stage clone directories before starting install ')
 
     parser.add_argument('--log-actions', dest='log_actions', action='store_true',
                         help='Creates a log of all cli commands and their output.')
@@ -169,24 +169,24 @@ def define_global_args(parser: argparse.ArgumentParser) -> None:
     parser.add_argument('--action-logfile', dest='log_path',
                         help='path of file for logging actions. Default ./simpli_log.log')
 
-    parser.add_argument('--clone-dir', dest='clone_dir_path',
-                        help='''The path for directory into which packages are cloned/unpacked.
-                Default to scripts/clone ''')
-
-    parser.add_argument('--stage-dir', dest='stage_dir_path',
-                        help='''The path for directory into which package headers amd archives
-            are copied after building. Default to scripts/stage ''')
-
-    parser.add_argument('--vendor-dir', dest='vendor_dir_path',
-                        help='''The path for directory into which package headers amd archives are installed locally
-                        for the project.\n Must always be an immediate subdirectory of the project-dir and defaults
-                        to {project-dir}/vendor.''')
-
-    parser.add_argument('--external-dir', dest='external_dir_path',
-                        help='''The path for directory into which packages delivered as copied source files will be
-                        installed.\n Must be inside the project source directory.\n Defaults to
-                        project_dir/source_dir_name/external. TODO: provide an option to install source-only packages
-                        into {project_dir}/vendor''')
+    # parser.add_argument('--clone-dir', dest='clone_dir_path',
+    #                     help='''The path for directory into which packages are cloned/unpacked.
+    #             Default to scripts/clone ''')
+    #
+    # parser.add_argument('--stage-dir', dest='stage_dir_path',
+    #                     help='''The path for directory into which package headers amd archives
+    #         are copied after building. Default to scripts/stage ''')
+    #
+    # parser.add_argument('--vendor-dir', dest='vendor_dir_path',
+    #                     help='''The path for directory into which package headers amd archives are installed locally
+    #                     for the project.\n Must always be an immediate subdirectory of the project-dir and defaults
+    #                     to {project-dir}/vendor.''')
+    #
+    # parser.add_argument('--external-dir', dest='external_dir_path',
+    #                     help='''The path for directory into which packages delivered as copied source files will be
+    #                     installed.\n Must be inside the project source directory.\n Defaults to
+    #                     project_dir/source_dir_name/external. TODO: provide an option to install source-only packages
+    #                     into {project_dir}/vendor''')
 
 
 #

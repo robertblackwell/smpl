@@ -55,18 +55,35 @@ def get_config(file_name: str) -> Configurations:
     return jdata
 
 
-def combined_config(cli_args) -> Defaults:
-    if cli_args.config_file_path is None:
-        config = get_config("./smpl.json")
-    else:
-        config = get_config(cli_args.config_file_path)
+# parameters for a single package extracted from the config file
+# at a min should have a "name" and "version" attribute
+class PackageParms:
+    def __init__(self, dict_data: Dict):
+        # these lines are to silence type warnings when self.name and self.version
+        # and to hel[ auto complete
+        self.name = ""
+        self.version = ""
+        if "name" not in dict_data:
+            raise ValueError("some dependency entry from the coonfig file does not have a name attribute")
 
-    m = Object.merge_objects(config, cli_args)
-    defaults: Defaults = Defaults.validate_and_construct_names(m)
-    return defaults
+        if "version" not in dict_data:
+            raise ValueError("dependency entry from config file name: {} does not have a version".format(self.name))
+        self.__dict__ = dict_data
 
-
+# Config object holds an amalganation of all the data from config_file and
+# cli args/options + a number of file path values derived from the config/arg
+# data
 class ConfigObject:
+
+    # get the parameters for a specific package that are in the dependecies field
+    # of the ConfigObject
+    def package_parms(self, package_name: str) -> PackageParms:
+        if package_name not in self.dependencies:
+            raise ValueError("package name {} not found in config file".format(package_name))
+        p = self.dependencies[package_name]
+        return p
+
+    # constructor
     def __init__(self, cli_args):
         if cli_args.config_file_path is None:
             config = get_config("./smpl.json")
@@ -121,25 +138,30 @@ class ConfigObject:
             exit()
 
         self.script_dir = os.path.join(self.project_dir, 'scripts')
-        if m.clone_dir_path:
+        if hasattr(m, 'clone_dir_path') and m.clone_dir_path:
             self.clone_dir = os.path.abspath(m.clone_dir_path)
         else:
             self.clone_dir = os.path.join(self.script_dir, 'clone')
 
-        if m.stage_dir_path:
+        if hasattr(m, 'stage_dir_path') and m.stage_dir_path:
             self.stage_dir = os.path.abspath(m.stage_dir_path)
         else:
             self.stage_dir = os.path.join(self.script_dir, 'stage')
 
-        if m.vendor_dir_path:
+        if hasattr(m, 'vendor_dir_path') and m.vendor_dir_path:
             self.vendor_dir = os.path.abspath(m.vendor_dir_path)
         else:
             self.vendor_dir = os.path.join(self.project_dir, 'vendor')
 
-        if m.external_dir_path:
+        if hasattr(m, 'external_dir_path') and m.external_dir_path:
             self.external_dir = os.path.abspath(m.external_dir_path)
         else:
             self.external_dir = os.path.join(self.vendor_dir, 'src')
 
         for d in m.dependencies:
-            self.dependencies[d.name] = d.parms
+            x = d.__dict__
+            if not hasattr(d, "name"):
+                raise ValueError("some dependency entry from the coonfig file does not have a name attribute")
+            if not hasattr(d, "version"):
+                raise ValueError("dependency entry from config file name: {} does not have a version".format(d.name))
+            self.dependencies[d.name] = PackageParms(d.__dict__)
