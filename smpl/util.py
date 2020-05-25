@@ -58,8 +58,8 @@ def exec_cmd(cmd, where: str):
             s2 = result.stdout
             s2 = result.stdout
         except Exception as exception:
-            print("An error occurred while running command [{}] error type: " + type(exception).__name__ + " {}".format(
-                cmd, str(exception)))
+            print("XXAn error occurred while running command [{}] error type: " + type(exception).__name__ + " {}".format(
+                ",".join(cmd), str(exception)))
             quit()
     else:
         try:
@@ -69,8 +69,8 @@ def exec_cmd(cmd, where: str):
             s2 = result.stdout
             s2 = result.stdout
         except Exception as exception:
-            print("An error occurred while running command [{}] error type: " + type(exception).__name__ + " {}".format(
-                cmd, str(exception)))
+            print("XXAn error occurred while running command [{}] error type: " + type(exception).__name__ + " {}".format(
+                ",".join(cmd), str(exception)))
             quit()
 
     # print("stdout: ", stdout)
@@ -122,11 +122,11 @@ def list_directory(directory_path: str) -> None:
 # @return Nothing
 # 
 def git_clone(git_url: str, cwd_where: str, git_branch_arg: Union[str, None] = None) -> None:
-    logger.writeln("git clone: {} {} into cwd {}".format(git_url, git_branch_arg, cwd_where))
+    logger.writeln("/usr/bin/git clone: {} {} into cwd {}".format(git_url, git_branch_arg, cwd_where))
     if git_branch_arg is None:
-        exec_cmd(["git", "clone", git_url], where=cwd_where)
+        exec_cmd(["/usr/bin/git", "clone", git_url], where=cwd_where)
     else:
-        exec_cmd(["git", "clone", git_url, "--branch", git_branch_arg], where=cwd_where)
+        exec_cmd(["/usr/bin/git", "clone", git_url, "--branch", git_branch_arg], where=cwd_where)
 
 
 def rm_file(file_path: AnyStr) -> None:

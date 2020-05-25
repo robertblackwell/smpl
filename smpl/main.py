@@ -13,9 +13,9 @@ pp = pprint.PrettyPrinter(indent=4)
 debug = True
 logfile = False
 
+__version__ = "0.5.0"
 
 def main():
-    __version__ = "0.5.0"
     parser = cli_interface.define_cli_interface()
 
     args = parser.parse_args()
