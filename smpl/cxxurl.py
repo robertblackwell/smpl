@@ -20,4 +20,4 @@ class CxxUrl(SourcePackage):
         self.stage_source("cxxurl", "cxxurl")
 
     def install_package(self):
-        self.install_stage_to_project("cxxurl", "cxxurl")
+        self.install_stage_to_project("cxxurl", "CxxUrl")

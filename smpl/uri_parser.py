@@ -22,4 +22,4 @@ class UriParser(SourcePackage):
 		self.stage_source("urlparser", "urlparser")
 
 	def install_package(self):
-		self.install_stage_to_project("urlparser" , "urlparser")
+		self.install_stage_to_project("urlparser" , "uri-parser")

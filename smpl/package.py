@@ -59,6 +59,14 @@ class PackageBase(object):
         self.package_stage_include_dir_path = os.path.join(self.stage_include_dir_path, package_name)
         self.package_vendor_include_dir_path = os.path.join(self.vendor_include_dir_path, package_name)
 
+        util.mkdir_p(self.cfg_obj.clone_dir)
+        util.mkdir_p(self.cfg_obj.stage_include_dir)
+        util.mkdir_p(self.cfg_obj.stage_lib_dir)
+        util.mkdir_p(self.cfg_obj.stage_src_dir)
+        util.mkdir_p(self.cfg_obj.vendor_dir)
+        util.mkdir_p(self.vendor_include_dir_path)
+        util.mkdir_p(self.vendor_lib_dir_path)
+
     def list_package(self) -> str:
         return "{:21} release: {:11} version: {:11}  url: {}".format(
             self.package_name[0:19],
@@ -76,7 +84,6 @@ class PackageBase(object):
     # branch_argument: allows the cloning of a spcecific branch or tag.
     # """
     def get_git_repo(self, repo_url: str, repo_name: str, branch_argument=None):
-
         package_clone_dir = os.path.join(self.cfg_obj.clone_dir, repo_name)
         util.rm_directory(package_clone_dir)
         util.git_clone(self.git_url, self.cfg_obj.clone_dir, branch_argument)
@@ -278,6 +285,8 @@ class SourcePackage(PackageBase):
             from_dir = os.path.join(self.cfg_obj.clone_dir, repo_name)
         else:
             from_dir = os.path.join(self.cfg_obj.clone_dir, repo_name, repo_sub_directory)
+        print("SourcePackage package build/stage: {} from_dir {} to_dir {} "
+              .format(self.package_name, from_dir, to_dir))
         util.clear_directory(to_dir)
         util.cp_directory_contents(from_dir, to_dir)
         util.list_directory(to_dir)
@@ -290,6 +299,9 @@ class SourcePackage(PackageBase):
         """
         from_dir = os.path.join(self.stage_external_src_dir_path, stage_name)
         to_dir = os.path.join(self.project_external_src_dir_path, source_name)
+        print("SourcePackage package: {} from_dir {} to_dir {} "
+              .format(self.package_name, from_dir, to_dir))
+
         util.clear_directory(to_dir)
         util.cp_directory_contents(from_dir, to_dir)
         util.list_directory(to_dir)

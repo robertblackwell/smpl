@@ -2,6 +2,7 @@ import os
 import subprocess
 import shutil
 import re
+import pprint
 from typing import Union, TextIO, List, AnyStr
 
 
@@ -58,6 +59,8 @@ def exec_cmd(cmd, where: str):
             s2 = result.stdout
             s2 = result.stdout
         except Exception as exception:
+            print("Cmd was ")
+            pprint(cmd)
             print("XXAn error occurred while running command [{}] error type: " + type(exception).__name__ + " {}".format(
                 ",".join(cmd), str(exception)))
             quit()
@@ -69,6 +72,8 @@ def exec_cmd(cmd, where: str):
             s2 = result.stdout
             s2 = result.stdout
         except Exception as exception:
+            print("Cmd was ")
+            pprint(cmd)
             print("XXAn error occurred while running command [{}] error type: " + type(exception).__name__ + " {}".format(
                 ",".join(cmd), str(exception)))
             quit()
@@ -144,6 +149,7 @@ def rm_directory(directory_path: AnyStr) -> None:
     if os.path.isdir(directory_path):
         logger.writeln("rm_rfv Existing {}".format(directory_path))
         if not dry_run:
+            print("cll rmtree on", directory_path)
             shutil.rmtree(directory_path)
     else:
         logger.writeln("rm_rfv NonExisting {}".format(directory_path))
@@ -161,7 +167,11 @@ def rm_directory_contents(directory_path: AnyStr, pattern: str = ".*") -> None:
                     if regex.match(f):
                         os.unlink(os.path.join(root, f))
                 for d in dirs:
-                    shutil.rmtree(os.path.join(root, d))
+                    print ("cll rmtree on", root, " ", d)
+                    if os.path.islink(os.path.join(root, d)):
+                        os.unlink(os.path.join(root,d))
+                    else:
+                        shutil.rmtree(os.path.join(root, d))
     else:
         logger.writeln("rm_rfv NonExisting {}".format(directory_path))
 

@@ -7,18 +7,20 @@ from typing import Any, List, Union
 import yaml
 from types import SimpleNamespace as Namespace
 
-from .boost import Boost
-from .openssl import OpenSSL
-from .cert_lib import CertLib
-from .simple_buffer import SimpleBuffer
-from .trog import Trog
-from .http_parser import HttpParser
-from .nodejs_http_parser import NodeJsHttpParser
-from .uri_parser import UriParser
-from .cxxurl import CxxUrl
-from .catch2 import Catch2
-from .nlohmann_json import NLohmannJson
-from .doctest import Doctest
+from smpl.boost import Boost
+from smpl.openssl import OpenSSL
+from smpl.cert_lib import CertLib
+from smpl.simple_buffer import SimpleBuffer
+from smpl.trog import Trog
+from smpl.http_parser import HttpParser
+from smpl.nodejs_http_parser import NodeJsHttpParser
+from smpl.uri_parser import UriParser
+from smpl.cxxurl import CxxUrl
+from smpl.catch2 import Catch2
+from smpl.nlohmann_json import NLohmannJson
+from smpl.doctest import Doctest
+from smpl.cli_package import CLIPackage
+from smpl.ncurses import NCurses
 import smpl.clean as clean
 
 import smpl.config_file as configuration
@@ -38,6 +40,8 @@ handler_table = {
     "catch2": lambda name, parms, cfg_obj: Catch2(name, parms, cfg_obj),
     "doctest": lambda name, parms, cfg_obj: Doctest(name, parms, cfg_obj),
     "nlohmann_json": lambda name, parms, cfg_obj: NLohmannJson(name, parms, cfg_obj),
+    "cli11": lambda name, parms, cfg_obj: CLIPackage(name, parms, cfg_obj),
+    "ncurses": lambda name, parms, cfg_obj: NCurses(name, parms, cfg_obj),
 }
 
 
