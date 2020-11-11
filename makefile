@@ -29,17 +29,17 @@ _license:
 # THIS WILL CREATE A GIT TAG
 # see tbump.toml
 # thi sis just a remonder
-bump:
-	tbump $(NEW_VERSION)
+# bump:
+# 	tbump $(NEW_VERSION)
 
-# bumppatch:
-# 	bumpversion --current-version `python setup.py --version` patch
-#
-# bumpminor:
-# 	bumpversion --current-version `python setup.py --version` minor
-#
-# bumpmajor:
-# 	bumpversion --current-version `python setup.py --version` major
+bumppatch:
+	bumpversion patch
+
+bumpminor:
+	bumpversion minor
+
+bumpmajor:
+	bumpversion major
 
 git_push_tags:
 	git push --tags origin master

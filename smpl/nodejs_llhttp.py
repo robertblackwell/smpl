@@ -34,11 +34,10 @@ class NodeJsLLHttp(SourcePackage):
         self.build_in_clone()
 
     def stage_package(self):
-        self.stage_source("llhttp/release/include", "llhttp/src")
-        self.stage_source("llhttp/release/src", "llhttp/src")
+        self.stage_source("llhttp", "llhttp", "release/include" )
+        self.stage_source("llhttp", "llhttp", "release/src", False)
 
     def install_package(self):
         # had to trick it into doing the right thing
-        self.install_stage_to_project("llhttp/include", "../src/llhttp")
-        self.install_stage_to_project("llhttp/src", "../src/llhttp", False)
+        self.install_stage_to_project("llhttp", "llhttp")
 

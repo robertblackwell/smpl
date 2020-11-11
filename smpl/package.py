@@ -274,11 +274,11 @@ class SourcePackage(PackageBase):
     # directory into the stage/external/package_name directory
     #
     # repo_name: is the name of the sub-dir of clone_dir that holds the repo
-    # stage_name: the subdir of stage/external where the headers+source are to go
+    # stage_name: the subdir of stage/external_src where the headers+source are to go
     # pattern: a regex pattern selecting only some headers+source files
     # repo_sub_directory: in some cases the required headers+source are in a sub-dir of the repo directory
     #
-    def stage_source(self, repo_name, stage_name, repo_sub_directory=None):
+    def stage_source(self, repo_name, stage_name, repo_sub_directory=None, clear_to_dir=True):
 
         to_dir = os.path.join(self.stage_external_src_dir_path, stage_name)
         if repo_sub_directory is None:
@@ -287,7 +287,8 @@ class SourcePackage(PackageBase):
             from_dir = os.path.join(self.cfg_obj.clone_dir, repo_name, repo_sub_directory)
         print("SourcePackage package build/stage: {} from_dir {} to_dir {} "
               .format(self.package_name, from_dir, to_dir))
-        util.clear_directory(to_dir)
+        if clear_to_dir:
+            util.clear_directory(to_dir)
         util.cp_directory_contents(from_dir, to_dir)
         util.list_directory(to_dir)
 
