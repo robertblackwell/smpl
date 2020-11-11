@@ -4,7 +4,8 @@ from smpl.config_file import ConfigObject, PackageParms
 
 supported_version = {
     "v2.0.0": "",
-    "v3.0.0": ""
+    "v3.0.0": "",
+    "V3.0.0": ""
 }
 
 

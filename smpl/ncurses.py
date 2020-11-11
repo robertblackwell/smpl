@@ -53,6 +53,7 @@ class NCurses(LibraryPackage):
         util.run([
             "./configure",
             "--prefix={}".format(self.cfg_obj.vendor_dir),
+            "--enable-sigwinch",
             "--with-normal",
             "--with-pthread",
             "--with-debug"

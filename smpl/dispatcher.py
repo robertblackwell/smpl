@@ -14,6 +14,7 @@ from smpl.simple_buffer import SimpleBuffer
 from smpl.trog import Trog
 from smpl.http_parser import HttpParser
 from smpl.nodejs_http_parser import NodeJsHttpParser
+from smpl.nodejs_llhttp import NodeJsLLHttp
 from smpl.uri_parser import UriParser
 from smpl.cxxurl import CxxUrl
 from smpl.catch2 import Catch2
@@ -35,6 +36,7 @@ handler_table = {
     "trog": lambda name, parms, cfg_obj: Trog(name, parms, cfg_obj),
     "http_parser": lambda name, parms, cfg_obj: HttpParser(name, parms, cfg_obj),
     "nodejs_http_parser": lambda name, parms, cfg_obj: NodeJsHttpParser(name, parms, cfg_obj),
+    "nodejs_llhttp": lambda name, parms, cfg_obj: NodeJsLLHttp(name, parms, cfg_obj),
     "uri-parser": lambda name, parms, cfg_obj: UriParser(name, parms, cfg_obj),
     "cxxurl": lambda name, parms, cfg_obj: CxxUrl(name, parms, cfg_obj),
     "catch2": lambda name, parms, cfg_obj: Catch2(name, parms, cfg_obj),
