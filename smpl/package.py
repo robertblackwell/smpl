@@ -291,7 +291,7 @@ class SourcePackage(PackageBase):
         util.cp_directory_contents(from_dir, to_dir)
         util.list_directory(to_dir)
 
-    def install_stage_to_project(self, stage_name, source_name):
+    def install_stage_to_project(self, stage_name, source_name, clear_to_dir=True):
         """
         Empties project_source/external_src/source_name
         and then
@@ -302,6 +302,7 @@ class SourcePackage(PackageBase):
         print("SourcePackage package: {} from_dir {} to_dir {} "
               .format(self.package_name, from_dir, to_dir))
 
-        util.clear_directory(to_dir)
+        if clear_to_dir:
+            util.clear_directory(to_dir)
         util.cp_directory_contents(from_dir, to_dir)
         util.list_directory(to_dir)

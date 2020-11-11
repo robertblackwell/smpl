@@ -2,7 +2,15 @@ import os
 from smpl.package import SourcePackage
 from smpl.config_file import ConfigObject, PackageParms
 import smpl.util as util
-
+#
+# llhttp is a project in which some of thec source code is generated.
+# to make it run
+#   make release
+# the all the code is in release/include and release/src
+#
+# to make it work in a hostng project all of the code both .h and .c
+#  must end up in vendor/src/llhttp/*.c *.h
+#
 class NodeJsLLHttp(SourcePackage):
     def __init__(self, name: str, parms: PackageParms, cfg_obj: ConfigObject):
         super().__init__(name, cfg_obj)
@@ -26,11 +34,11 @@ class NodeJsLLHttp(SourcePackage):
         self.build_in_clone()
 
     def stage_package(self):
-        self.stage_source("llhttp/release/include", "llhttp/include")
+        self.stage_source("llhttp/release/include", "llhttp/src")
         self.stage_source("llhttp/release/src", "llhttp/src")
 
     def install_package(self):
         # had to trick it into doing the right thing
-        self.install_stage_to_project("llhttp/include", "../include/llhttp")
-        self.install_stage_to_project("llhttp/src", "../src/llhttp")
+        self.install_stage_to_project("llhttp/include", "../src/llhttp")
+        self.install_stage_to_project("llhttp/src", "../src/llhttp", False)
 

@@ -4,7 +4,7 @@ MYEMAIL="rob@whiteacorn.com"
 PROJECT_NAME="smpl"
 LICENSE=MIT
 PREFIX=$(HOME)/.local
-
+NEW_VERSION=
 # this is rag-tap collection of convenience options, without any systematic
 # set for buildiing and distributing. Sorry
 
@@ -25,14 +25,21 @@ push:
 _license:
 	licenser -n $(MYNAME) -e $(MYEMAIL) -l "MIT" -p "smpl"
 
-bumppatch:
-	bumpversion --current-version `python setup.py --version` patch
+# use tbump <new_version>
+# THIS WILL CREATE A GIT TAG
+# see tbump.toml
+# thi sis just a remonder
+bump:
+	tbump $(NEW_VERSION)
 
-bumpminor:
-	bumpversion --current-version `python setup.py --version` minor
-
-bumpmajor:
-	bumpversion --current-version `python setup.py --version` major
+# bumppatch:
+# 	bumpversion --current-version `python setup.py --version` patch
+#
+# bumpminor:
+# 	bumpversion --current-version `python setup.py --version` minor
+#
+# bumpmajor:
+# 	bumpversion --current-version `python setup.py --version` major
 
 git_push_tags:
 	git push --tags origin master
