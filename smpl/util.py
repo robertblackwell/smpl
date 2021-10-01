@@ -46,9 +46,11 @@ def try_popen(cmd, where: str):
 # dies on error
 # runs a command in array form ["cmd", "arg1", "arg2" ....]
 def exec_cmd(cmd, where: str):
-    stdout = None
-    stderr = None
-    reult = "123"
+    print("exec_cmd")
+    print(cmd)
+    # stdout = None
+    # stderr = None
+    result = "123"
     if dry_run:
         return "", None
     if where is None:
@@ -88,12 +90,12 @@ def run(cmd, where: Union[str, None] = None) -> None:
         raise ValueError("cmd must be array")
     if where is None:
         line = "run: [{}] ".format(cmd)
-        # print("run: [{}] ".format(cmd))
+        print("run: [{}] ".format(cmd))
         exec_cmd(cmd, where)
         logger.writeln(line)
     else:
         line = "run: [{}] where = {} ".format(cmd, where)
-        # print("run: [{}] where = {} ".format(cmd, where))
+        print("run: [{}] where = {} ".format(cmd, where))
         exec_cmd(cmd, where)
         logger.writeln(line)
 
@@ -252,3 +254,14 @@ def cp_directory_contents(src_directory_path: str, dest_directory_path: str, pat
     else:
         raise ValueError("cp_directory_files one of the arguments is not a directory {} {}".format(src_directory_path,
                                                                                                    dest_directory_path))
+
+
+def unpack_tar_gz(fromfile, todir):
+    if not os.path.isdir(todir):
+        raise ValueError("unpack_tar_gz toDir {} is not a dir".format(todir))
+    if not os.path.isfile(fromfile):
+        raise ValueError("unpack_tar_gz fromfile {} is not a file".format(todir))
+
+    logger.writeln("utils.unpack_tar_gz fromfile:[{}] todir:[{}]\n".format(fromfile, todir))
+    run(["tar", "-xvzf", fromfile, "-C", todir])
+ 

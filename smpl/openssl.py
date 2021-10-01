@@ -10,7 +10,8 @@ openssl_name = "openssl-1.1.1f"
 
 # package_url = "https://dl.bintray.com/boostorg/release/{}/source/boost_1_72_0.tar.gz".format(boost_release)
 package_url = "https://www.openssl.org/source/{}.tar.gz".format(openssl_name)
-package_targz_file = "tar xvzf {}.tar.gz".format(openssl_name)
+package_targz_file = "{}.tar.gz".format(openssl_name)
+# package_targz_file = "tar xvzf {}.tar.gz".format(openssl_name)
 
 
 class OpenSSL(LibraryPackage):

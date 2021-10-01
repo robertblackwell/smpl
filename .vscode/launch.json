@@ -11,7 +11,7 @@
             "request": "launch",
             "program": "${workspaceFolder}/runner.py",
             "cwd":"${workspaceFolder}/project_pig",
-            "args":["--config-file", "${workspaceFolder}/project_pig/smpl.json", "--log-actions"],
+            "args":["--config-file", "${workspaceFolder}/project_pig/smpl.json", "--log-actions", "download", "openssl"],
             "console": "integratedTerminal"
         },
         {

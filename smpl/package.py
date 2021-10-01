@@ -95,15 +95,14 @@ class PackageBase(object):
         tar_file_path = os.path.join(self.cfg_obj.clone_dir, tar_file_name)
         util.rm_file(tar_file_path)
         util.run(["wget", "-O", tar_file_path, tar_url])
-        print("tar " + " -xvzf" + tar_file_path + "-C" + self.cfg_obj.clone_dir)
-        util.run(["tar", "-xvzf", tar_file_path, "-C", self.cfg_obj.clone_dir])
+        util.unpack_tar_gz(tar_file_path, self.cfg_obj.clone_dir)
         util.list_directory(self.cfg_obj.clone_dir)
-        util.clear_directory(package_clone_dir)
+        # why would you do this ?
+        # util.clear_directory(package_clone_dir)
 
     def headers_from_stage_to_vendor(self, stage_name, vendor_name):
         """
-        Empties vendor/include/vendor_name
-        and then
+        Empties vendor/include/vendor_name and then
         Copies header files from stage/include/stage_name to vendor/include/vendor_name
         """
         from_dir = os.path.join(self.stage_include_dir_path, stage_name)
