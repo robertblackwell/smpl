@@ -5,14 +5,15 @@ PROJECT_NAME="smpl"
 LICENSE=MIT
 PREFIX=$(HOME)/.local
 NEW_VERSION=
+PYTHON=python3
 # this is rag-tap collection of convenience options, without any systematic
 # set for buildiing and distributing. Sorry
 
 install:
-	python3 setup.py install --prefix=$(PREFIX) 
+	$(PYTHON) setup.py install --prefix=$(PREFIX) 
 
 clean:
-	python setup.py clean
+	$(PYTHON) setup.py clean
 	rm -rfv ./build
 	rm *whl 
 	rm *.pex
@@ -63,8 +64,8 @@ dist:
 	make readme
 	make git_commit
 	make bumpminor
-	python setup.py sdist
+	$(PYTHON) setup.py sdist
 
 upload: 
 	make dist
-	python setup.py upload
+	$(PYTHON) setup.py upload
