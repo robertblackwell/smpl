@@ -9,7 +9,7 @@ NEW_VERSION=
 # set for buildiing and distributing. Sorry
 
 install:
-	python setup.py install --prefix=$(PREFIX) 
+	python3 setup.py install --prefix=$(PREFIX) 
 
 clean:
 	python setup.py clean
