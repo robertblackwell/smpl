@@ -17,7 +17,7 @@ class Trog(HeadersOnlyPackage):
         if parms.version not in supported_version:
             raise ValueError("version {} not supported".format(parms.version))
         self.release = parms.version
-        self.git_url = "git@github.com:robertblackwell/trog.git"
+        self.git_url = "https://github.com/robertblackwell/trog.git"
         self.git_branch_arg = self.release
         self.package_clone_dir_path = os.path.join(self.cfg_obj.clone_dir, "trog")
         self.package_clone_dir_source_path = os.path.join(self.package_clone_dir_path, "trog")

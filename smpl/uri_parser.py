@@ -10,7 +10,7 @@ class UriParser(SourcePackage):
 		self.parms = parms
 		self.package_git_name = "urlparser"
 		self.release = ""
-		self.git_url = "git@github.com:robertblackwell/{}.git".format(self.package_git_name)
+		self.git_url = "https://github.com/robertblackwell/{}.git".format(self.package_git_name)
 		self.package_clone_dir_path = os.path.join(self.cfg_obj.clone_dir, self.package_git_name)
 		self.package_clone_dir_source_path = os.path.join(self.package_clone_dir_path, self.package_stage_include_dir_path)
 		self.package_stage_source_path = os.path.join(self.package_stage_external_src_dir_path, self.package_stage_include_dir_path)

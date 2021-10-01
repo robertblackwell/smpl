@@ -110,8 +110,10 @@ def clear_directory(directory_path: str) -> None:
 
 
 def list_directory(directory_path: str) -> None:
-    exec_cmd(["ls", "-al"], where=directory_path)
-
+    if os.path.isdir(directory_path):
+        exec_cmd(["ls", "-al"], where=directory_path)
+    else:
+        raise RuntimeError("Invalid directory path " + directory_path)
 
 #
 # Clones a github repo, optionally with a --branch argument, 

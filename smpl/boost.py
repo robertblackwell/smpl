@@ -3,16 +3,17 @@ import smpl.util as util
 from smpl.package import LibraryPackage
 from smpl.config_file import ConfigObject, PackageParms
 
+#        # "url": "https://dl.bintray.com/boostorg/release/1.71.0/source/boost_1_71_0.tar.gz",
 supported_versions = {
     "1.72.0": {
-        "url": "https://dl.bintray.com/boostorg/release/1.72.0/source/boost_1_72_0.tar.gz",
-        "targz": "boost_1_72_0.tag.gz",
+        "url": "https://sourceforge.net/projects/boost/files/boost/1.72.0/boost_1_72_0.tar.gz/download",
+        "targz": "boost_1_72_0.tar.gz",
         "repo_name": "boost_1_72_0"
     },
 
     "1.71.0": {
-        "url": "https://dl.bintray.com/boostorg/release/1.71.0/source/boost_1_71_0.tar.gz",
-        "targz": "boost_1_71_0.tag.gz",
+        "url":"https://boostorg.jfrog.io/ui/native/main/release/1.71.0/source/boost_1_71_0.zip",
+        "targz": "boost_1_71_0.zip",
         "repo_name": "boost_1_71_0"
     }
 }

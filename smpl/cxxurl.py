@@ -8,7 +8,7 @@ class CxxUrl(SourcePackage):
         self.name = name
         self.parms = parms
         self.release = ""
-        self.git_url = "git@github.com:robertblackwell/cxxurl.git"
+        self.git_url = "https://github.com/robertblackwell/cxxurl.git"
         self.package_clone_dir_path = os.path.join(self.cfg_obj.clone_dir, "cxxurl")
         self.package_clone_dir_source_path = os.path.join(self.package_clone_dir_path, "cxxurl")
         self.package_stage_source_path = os.path.join(self.package_stage_external_src_dir_path, "cxxurl")

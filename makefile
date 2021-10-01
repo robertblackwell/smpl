@@ -33,13 +33,13 @@ _license:
 # 	tbump $(NEW_VERSION)
 
 bumppatch:
-	bumpversion patch
+	bumpversion --verbose patch
 
 bumpminor:
-	bumpversion minor
+	bumpversion --verbose minor
 
 bumpmajor:
-	bumpversion major
+	bumpversion --verbose major
 
 git_push_tags:
 	git push --tags origin master
