@@ -1,121 +1,38 @@
 import os
-import subprocess
 import shutil
 import re
-import pprint
 from typing import Union, TextIO, List, AnyStr
+import smpl.exec as exec
+import smpl.log_module as logger
 
+dry_run = False
+# 
+# Configure util for a dry_run - be sure to pass this on to exec module
+# as well
+# 
+def configure(dryrun):
+    dry_run = dryrun
+    exec.configure(arg_dry_run=dry_run)
 
-class Logger:
-    def __init__(self):
-        self.enabled: bool = False
-        self.log_file_path: str = 'action_log.log'
-        self.log_file = None
-
-    def open(self) -> None:
-        self.enabled = True
-        self.log_file: TextIO = open(self.log_file_path, "w+")
-
-    def write(self, text: str) -> None:
-        if self.enabled:
-            self.log_file.write(text)
-
-    def writeln(self, line: str) -> None:
-        if self.enabled:
-            self.log_file.write(line + "\n")
-
-
-log_file_path = ""
-log_file = None
-
-logger: Logger = Logger()
-dry_run: bool = False
-
-
-def try_popen(cmd, where: str):
-    print("in try_popen")
-    popen = subprocess.Popen(cmd, cwd=where, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
-    for stdout_line in iter(popen.stdout.readline, ""):
-        yield stdout_line
-    popen.stdout.close()
-    return_code: int = popen.wait()
-    if return_code:
-        raise subprocess.CalledProcessError(return_code, cmd)
-
-
-# dies on error
-# runs a command in array form ["cmd", "arg1", "arg2" ....]
-def exec_cmd(cmd, where: str):
-    print("exec_cmd")
-    print(cmd)
-    # stdout = None
-    # stderr = None
-    result = "123"
-    if dry_run:
-        return "", None
-    if where is None:
-        try:
-            result = subprocess.run(cmd)  # stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            s = result.returncode
-            s3 = result.stderr
-            s2 = result.stdout
-            s2 = result.stdout
-        except Exception as exception:
-            print("Cmd was ")
-            pprint(cmd)
-            print("XXAn error occurred while running command [{}] error type: " + type(exception).__name__ + " {}".format(
-                ",".join(cmd), str(exception)))
-            quit()
-    else:
-        try:
-            result = subprocess.run(cmd, cwd=where)  # , stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            s = result.returncode
-            s3 = result.stderr
-            s2 = result.stdout
-            s2 = result.stdout
-        except Exception as exception:
-            print("Cmd was ")
-            pprint(cmd)
-            print("XXAn error occurred while running command [{}] error type: " + type(exception).__name__ + " {}".format(
-                ",".join(cmd), str(exception)))
-            quit()
-
-    # print("stdout: ", stdout)
-    # if stderr is not None:
-    # 	print("stderr: ", stderr)
-
-
-def run(cmd, where: Union[str, None] = None) -> None:
-    if not isinstance(cmd, list):
-        raise ValueError("cmd must be array")
-    if where is None:
-        line = "run: [{}] ".format(cmd)
-        print("run: [{}] ".format(cmd))
-        exec_cmd(cmd, where)
-        logger.writeln(line)
-    else:
-        line = "run: [{}] where = {} ".format(cmd, where)
-        print("run: [{}] where = {} ".format(cmd, where))
-        exec_cmd(cmd, where)
-        logger.writeln(line)
-
-
-def set_log_file(logfile_path):
-    logger.log_file_path = logfile_path
-    logger.open()
+# get a remote file
+def wget(url, desf_file_name):
+    exec.run(["wget", "-q", "-O", desf_file_name, url])
 
 
 # ensures that a directory exists and is empty
 def clear_directory(directory_path: str) -> None:
+    logger.debugln(" directory_path: {}".format(directory_path))
     rm_directory(directory_path)
     mkdir_p(directory_path)
 
-
+# list the contents of a directory
 def list_directory(directory_path: str) -> None:
+    logger.debugln(" directory_path: {}".format(directory_path))
     if os.path.isdir(directory_path):
-        exec_cmd(["ls", "-al"], where=directory_path)
+        exec.exec_cmd(["ls", "-al"], where=directory_path)
     else:
         raise RuntimeError("Invalid directory path " + directory_path)
+
 
 #
 # Clones a github repo, optionally with a --branch argument, 
@@ -131,72 +48,77 @@ def list_directory(directory_path: str) -> None:
 # @return Nothing
 # 
 def git_clone(git_url: str, cwd_where: str, git_branch_arg: Union[str, None] = None) -> None:
-    logger.writeln("/usr/bin/git clone: {} {} into cwd {}".format(git_url, git_branch_arg, cwd_where))
+    logger.debugln(" url: {} branch: {} into cwd {}".format(git_url, git_branch_arg, cwd_where))
     if git_branch_arg is None:
-        exec_cmd(["/usr/bin/git", "clone", git_url], where=cwd_where)
+        exec.run(["/usr/bin/git", "clone", git_url], where=cwd_where)
     else:
-        exec_cmd(["/usr/bin/git", "clone", git_url, "--branch", git_branch_arg], where=cwd_where)
+        exec.run(["/usr/bin/git", "clone", git_url, "--branch", git_branch_arg], where=cwd_where)
 
-
+# remove a file
 def rm_file(file_path: AnyStr) -> None:
+    logger.debugln(" file_path: {}".format(file_path))
     if os.path.isfile(file_path):
-        logger.writeln("remove file: {}".format(file_path))
+        logger.debugln(" {}".format(file_path))
         if not dry_run:
             os.unlink(file_path)
     else:
-        logger.writeln("remove (not exist) file: {}".format(file_path))
+        logger.debugln(" not exist: {}".format(file_path))
 
 
 # remove a directory and its contents if it exists
 # equivalent of rm -rvf directory_path/
 def rm_directory(directory_path: AnyStr) -> None:
+    logger.debugln(" directory_path: {}".format(directory_path))
     if os.path.isdir(directory_path):
-        logger.writeln("rm_rfv Existing {}".format(directory_path))
+        logger.debugln(" Existing {}".format(directory_path))
         if not dry_run:
-            print("cll rmtree on", directory_path)
+            logger.debugln(" call rmtree on {}".format(directory_path))
             shutil.rmtree(directory_path)
     else:
-        logger.writeln("rm_rfv NonExisting {}".format(directory_path))
+        logger.debugln(" NonExisting {}".format(directory_path))
 
 
 # remove a directory's  contents if it exists
 # equivalent of rm -rvf directory_path/*
 def rm_directory_contents(directory_path: AnyStr, pattern: str = ".*") -> None:
+    logger.debugln(" directory_path: {} pattern: {}".format(directory_path, pattern))
     regex = re.compile(pattern)
     if os.path.isdir(directory_path):
-        logger.writeln("rm_rfv_content Existing {}".format(directory_path))
+        logger.debugln(" Existing {}".format(directory_path))
         if not dry_run:
             for root, dirs, files in os.walk(directory_path):
                 for f in files:
                     if regex.match(f):
                         os.unlink(os.path.join(root, f))
                 for d in dirs:
-                    print ("cll rmtree on", root, " ", d)
+                    logger.debugln(" call rmtree on root:{} d:{}".format(root, d))
                     if os.path.islink(os.path.join(root, d)):
-                        os.unlink(os.path.join(root,d))
+                        os.unlink(os.path.join(root, d))
                     else:
                         shutil.rmtree(os.path.join(root, d))
     else:
-        logger.writeln("rm_rfv NonExisting {}".format(directory_path))
+        logger.debugln("rm_directory_contents NonExisting {}".format(directory_path))
 
-
+# make a directory and all intermediate dirs as well
 def mkdir_p(directory_path: AnyStr) -> None:
+    logger.debugln(" directory_path: {} ".format(directory_path))
     if not os.path.exists(directory_path):
         if not dry_run:
             os.makedirs(directory_path)
-        logger.writeln("rm_rfv NonExisting {}".format(directory_path))
+        logger.debugln(" NonExisting {}".format(directory_path))
     else:
-        logger.writeln("rm_rfv Existing {}".format(directory_path))
+        logger.debugln(" Existing {}".format(directory_path))
 
 
 def cp_directory():
     pass
 
-
+# copy a dirrctory hierachy
 def cp_directory_fulldir(src: AnyStr, dest: AnyStr) -> None:
+    logger.debugln("util.cp_directory_fulldir src: {} dest: {} ".format(src, dest))
     if not dry_run:
         shutil.copytree(src, dest)
-    logger.writeln("cp_directory_fulldir {} -> {}".format(src, dest))
+    logger.debugln("cp_directory_fulldir {} -> {}".format(src, dest))
 
 
 #
@@ -207,9 +129,10 @@ def cp_directory_fulldir(src: AnyStr, dest: AnyStr) -> None:
 #  @param string pattern default=".*" is a regex patter
 # 
 def cp_directory_files(src_directory_path: str, dest_directory_path: str, pattern=".*") -> None:
+    logger.debugln(" src: {} dest: {} pattern: {} ".format(src_directory_path, dest_directory_path, pattern))
     regex = re.compile(pattern)
     if os.path.isdir(src_directory_path) and os.path.isdir(dest_directory_path):
-        logger.writeln("cp_directory_files {} {} {}".format(src_directory_path, dest_directory_path, pattern))
+        logger.debugln("both exist {} {} {}".format(src_directory_path, dest_directory_path, pattern))
         if not dry_run:
             for thing in os.listdir(src_directory_path):
                 srcfullpath = os.path.join(src_directory_path, thing)
@@ -238,6 +161,7 @@ def cp_directory_files(src_directory_path: str, dest_directory_path: str, patter
 # @throw ValueError if the inputs are not valid existing directory paths
 # 
 def cp_directory_contents(src_directory_path: str, dest_directory_path: str, pattern=".*") -> None:
+    logger.debugln(" src: {} dest: {} pattern: {} ".format(src_directory_path, dest_directory_path, pattern))
     regex = re.compile(pattern)
     if os.path.isdir(src_directory_path) and os.path.isdir(dest_directory_path):
         logger.writeln("cp_directory_files {} {} {}".format(src_directory_path, dest_directory_path, pattern))
@@ -255,13 +179,17 @@ def cp_directory_contents(src_directory_path: str, dest_directory_path: str, pat
         raise ValueError("cp_directory_files one of the arguments is not a directory {} {}".format(src_directory_path,
                                                                                                    dest_directory_path))
 
-
-def unpack_tar_gz(fromfile, todir):
+# unpack a tar.gz file
+def unpack_tar_gz(fromfile: str, todir: str) -> None:
+    logger.debugln(" fromfile: {} todir: {} ".format(fromfile, todir))
     if not os.path.isdir(todir):
         raise ValueError("unpack_tar_gz toDir {} is not a dir".format(todir))
     if not os.path.isfile(fromfile):
         raise ValueError("unpack_tar_gz fromfile {} is not a file".format(todir))
 
-    logger.writeln("utils.unpack_tar_gz fromfile:[{}] todir:[{}]\n".format(fromfile, todir))
-    run(["tar", "-xvzf", fromfile, "-C", todir])
- 
+    exec.run(["tar", "-xvzf", fromfile, "-C", todir])
+
+
+if __name__ == '__main__':
+    logger.init(logger.LOG_LEVEL_DEBUG)
+    exec.run(["wget", "http://whiteacorn.com"], None)

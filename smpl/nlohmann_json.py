@@ -1,11 +1,14 @@
 import os
 from smpl.package import HeadersOnlyPackage
 from smpl.config_file import ConfigObject, PackageParms
+import smpl.util as util
+import smpl.log_module as logger
 package_name = "json"
 
 
 class NLohmannJson(HeadersOnlyPackage):
     def __init__(self, name, parms: PackageParms, cfg_obj: ConfigObject):
+        logger.debugln("class: {} package name {} ".format(type(self).__name__, name));
         super().__init__(name, cfg_obj)
         self.name = name
         self.package_clone_dir_path = os.path.join(self.cfg_obj.clone_dir, "json")
@@ -19,11 +22,14 @@ class NLohmannJson(HeadersOnlyPackage):
         self.package_vendor_include_dir_path = os.path.join(self.cfg_obj.vendor_dir, "include", "json")
 
     def get_package(self):
+        logger.debugln("class: {} package name {} ".format(type(self).__name__, self.name))
         self.get_git_repo(self.git_url, "json", self.git_branch_arg)
 
     def stage_package(self):
+        logger.debugln("class: {} package name {} ".format(type(self).__name__, self.name))
         self.stage_headers_only_from_repo(repo_name="json", stage_name="json",
                                           repo_sub_directory="single_include/nlohmann")
 
     def install_package(self):
+        logger.debugln("class: {} package name {} ".format(type(self).__name__, self.name))
         self.headers_from_stage_to_vendor("json", "json")

@@ -1,5 +1,7 @@
 import os
 import smpl.util as util
+import smpl.exec as exec
+import smpl.log_module as logger
 from smpl.package import LibraryPackage
 from smpl.config_file import ConfigObject, PackageParms
 
@@ -29,8 +31,8 @@ class Finalcut(LibraryPackage):
             arch_arg = "darwin64-x86_64-cc"
         else:
             raise RuntimeError("could not determine platform type for finalcut build options - platform is: {}".format(sys_desc))
-        util.run(["autoreconf", "--install", "--force"])
-        util.run(["./configure",
+        exec.run(["autoreconf", "--install", "--force"])
+        exec.run(["./configure",
                   "--prefix={}".format(self.cfg_obj.stage_dir),
                   "--debug"
                   # arch_arg,
@@ -39,8 +41,8 @@ class Finalcut(LibraryPackage):
                   ],
                  self.package_clone_dir_versioned_path)
 
-        util.run(["make", "all"], self.package_clone_dir_versioned_path)
-        util.run(["make", "install"], self.package_clone_dir_versioned_path)
+        exec.run(["make", "all"], self.package_clone_dir_versioned_path)
+        exec.run(["make", "install"], self.package_clone_dir_versioned_path)
 
     def install_package(self):
         self.headers_from_stage_to_vendor("cert", "cert")

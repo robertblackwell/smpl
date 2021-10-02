@@ -1,5 +1,7 @@
 import os
 import smpl.util as util
+import smpl.exec as exec
+import smpl.log_module as logger
 from smpl.package import LibraryPackage
 from smpl.config_file import ConfigObject, PackageParms
 
@@ -26,6 +28,7 @@ supported_versions = {
 
 class Boost(LibraryPackage):
     def __init__(self, name, parms: PackageParms, cfg_obj: ConfigObject):
+        logger.debugln("class: {} package name {} ".format(type(self).__name__, name));
         super().__init__(name, cfg_obj)
         if parms.version not in supported_versions:
             v = ", ".join(supported_versions.keys())
@@ -45,10 +48,12 @@ class Boost(LibraryPackage):
         self.clone_dir_path = os.path.join(self.cfg_obj.clone_dir, self.repo_name)
 
     def get_package(self):
+        logger.debugln("class: {} package name {} ".format(type(self).__name__, self.name));
         self.get_and_unpack_tar(self.package_url, self.targz, self.repo_name)
 
     def stage_package(self):
-        util.logger.writeln("Boost stage_package begin")
+        logger.debugln("class: {} package name {} ".format(type(self).__name__, self.name));
+        logger.writeln("Boost stage_package begin")
         util.mkdir_p(self.stage_include_dir_path)
 
         # make sure stage/include/boost exists and is empty
@@ -57,14 +62,15 @@ class Boost(LibraryPackage):
 
         util.mkdir_p(self.stage_lib_dir_path)
 
-        util.run(["rm", "-rf", "{}/libboost*".format(self.stage_lib_dir_path)])
+        exec.run(["rm", "-rf", "{}/libboost*".format(self.stage_lib_dir_path)], None)
 
-        util.run([
+        exec.run([
             "./bootstrap.sh",
+            "--with-python=/usr/bin/python3", #this MUST be the system location not a venv location
             "--prefix={}".format(self.cfg_obj.stage_dir),
             "darwin64-x86_64-cc"
         ], self.clone_dir_path)
-        util.run([
+        exec.run([
             "./b2",
             "install",
             "--link=static",
@@ -72,8 +78,9 @@ class Boost(LibraryPackage):
             "--variant=debug",
             "--layout=system",
         ], self.clone_dir_path)
-        util.logger.writeln("Boost stage_package end")
+        logger.writeln("Boost stage_package end")
 
     def install_package(self):
+        logger.debugln("class: {} package name {} ".format(type(self).__name__, self.name));
         self.headers_from_stage_to_vendor("boost", "boost")
         self.libs_from_stage_to_vendor("libboost.*")

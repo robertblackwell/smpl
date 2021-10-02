@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+	
+	<meta name="description" content="The overlanding blog of Nina and Robert Blackwell">
+	<meta name="author" content="Robert Blackwell and Brendon Blackwell">
+	
+	<link rel="icon" href="/skins/rtw/images/favicon.ico">
+
+	<title>whiteacorn - overlanding blog</title>
+
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+	<meta http-equiv="Pragma" content="no-cache">
+	<meta http-equiv="Expires" content="0">
+
+		<link rel="stylesheet" href="/skins/site/dist/combined.8ce5169e5b7db0660001a6b7dd6ce5c2.css">
+
+		<script type="text/javascript" src="/skins/site/dist/bundle.3b0270a3611214d197fbc098c7b112a9.js"></script>
+
+  </head>
+
+<body class="home">
+    
+	
+	<div id="wa-top-bar" class="container">
+					
+<!-- using new templates V2 -->
+
+		<nav id="wa-top-nav" class="navbar navbar-inverse " >
+			<div class="navbar-header">
+				<a class="navbar-brand" href="#">
+					<img id='whiteacorn-logo' 
+						src='/skins/rtw/images/waLogo.png' > 
+				</a>
+				<button type ="button" class ="clealrfix navbar-toggle" data-toggle ="collapse" 
+																data-target ="#navbarToCollapse"  > 
+					<div id="button-label">MAIN MENU</div>
+					<div id="button-icon">
+						<span class ="sr-only collapse" >Toggle header </span > 
+						<span class ="icon-bar" > </span > 
+						<span class ="icon-bar" > </span > 
+						<span class ="icon-bar" > </span > 
+					</div>
+				</button >
+			</div>
+					
+		<div id="navbarToCollapse" class="collapse navbar-collapse">
+			<ul id="navbar" class='nav navbar-nav navbar-right'>
+			<li>
+				<a id="menu-site_home"  href=/ 
+					data-tooltip="U2l0ZSBob21l"
+					data-placement='bottom'
+				> 
+					Home
+				</a>
+			</li><li class="dropdown">
+	<a href="/" data-toggle="dropdown" class='selected dropdown-toggle'
+		data-tooltip="RHJvcCBkb3duIG1lbnUgLSBzZWxlY3QgYW4gYWR2ZW50dXJl"
+		data-placement='se'
+	>
+		Adventures<b class="caret"></b>
+	</a>
+	<ul class="dropdown-menu">
+				<li data-tooltip="U0UgQXNpYSBhbmQgQ2VudHJhbCBBc2lhIDIwMjA=">
+			<a href="/home/asia2020" data-tooltip="U0UgQXNpYSBhbmQgQ2VudHJhbCBBc2lhIDIwMjA=">Asia 2020</a>	
+		</li>		<li data-tooltip="Q2hyaXN0bWFzIDIwMTkgQW50YXJjdGljIENydWlzZQ==">
+			<a href="/home/antarctica" data-tooltip="Q2hyaXN0bWFzIDIwMTkgQW50YXJjdGljIENydWlzZQ==">Antarctica</a>	
+		</li>		<li data-tooltip="T3VyIEF1c3RyYWxpYW4gQWR2ZW50dXJl">
+			<a href="/home/aust" data-tooltip="T3VyIEF1c3RyYWxpYW4gQWR2ZW50dXJl">Australia</a>	
+		</li>		<li data-tooltip="VG9wIHRvIEJvdHRvbSBvZiB0aGUgQW1lcmljYXMgYW5kIHJldHVybg==">
+			<a href="/home/theamericas" data-tooltip="VG9wIHRvIEJvdHRvbSBvZiB0aGUgQW1lcmljYXMgYW5kIHJldHVybg==">The Americas</a>	
+		</li>		<li data-tooltip="Rml2ZSB5ZWFycyBhcm91bmQgdGhlIHdvcmxk">
+			<a href="/home/rtw" data-tooltip="Rml2ZSB5ZWFycyBhcm91bmQgdGhlIHdvcmxk">Round The World</a>	
+		</li>		<li data-tooltip="QWR2ZW50dXJlcyB3aXRoIG91ciBFYXJ0aFJvYW1lcg==">
+			<a href="/home/er" data-tooltip="QWR2ZW50dXJlcyB3aXRoIG91ciBFYXJ0aFJvYW1lcg==">Earthroamer</a>	
+		</li>		<li data-tooltip="TW90b3JjeWNsZSBBZHZlbnR1cmVz">
+			<a href="/home/bmw11" data-tooltip="TW90b3JjeWNsZSBBZHZlbnR1cmVz">Motorcycle</a>	
+		</li>
+	</ul>
+</li>			<li>
+				<a id="menu-map"  href=/map 
+					data-tooltip="QWxsIHRoZSBwbGFjZXMgd2UgaGF2ZSBiZWVuIHNpbmNlIDIwMDk="
+					data-placement='bottom'
+				> 
+					Map
+				</a>
+			</li>			<li>
+				<a id="menu-photos"  href=/photos 
+					data-tooltip="U2VlIGFsbCBvdXIgcGhvdG9z"
+					data-placement='bottom'
+				> 
+					Photos
+				</a>
+			</li>			<li>
+				<a id="menu-contact"  href=/contact 
+					data-tooltip="Q29udGFjdCB1cyBieSBlbWFpbCBvciBsZWF2ZSBhIG1lc3NhZ2U="
+					data-placement='bottom'
+				> 
+					Contact
+				</a>
+			</li>			<li>
+				<a id="menu-subscribe"  href=/subscribe 
+					data-tooltip="U3Vic2NyaWJlIHRvIG91ciBzaXRlLCBnZXQgZW1haWwgbm90aWZpY2F0aW9uIG9mIG5ldyBlbnRyaWVzLCBvciBvdXIgUlNTIGZlZWQg"
+					data-placement='bottom'
+				> 
+					Subscribe
+				</a>
+			</li>
+			</ul>
+		</div>                
+	</nav><!-- grid -->
+
+<!-- using new templates V2 -->
+			</div>
+	
+				<div id="banner" class="wa-banner" data-width='960' data-height='300'>
+							<img src="http://whiteacorn.com/data/asia2020/banners/asia2020-2/Images/pict-1.jpg" class="image-responsive" data-width='1920' data-height='549' style="display:none"/>			<img src="http://whiteacorn.com/data/asia2020/banners/asia2020-2/Images/pict-10.jpg" class="image-responsive" data-width='1920' data-height='549' style="display:none"/>			<img src="http://whiteacorn.com/data/asia2020/banners/asia2020-2/Images/pict-2.jpg" class="image-responsive" data-width='1920' data-height='549' style="display:none"/>			<img src="http://whiteacorn.com/data/asia2020/banners/asia2020-2/Images/pict-3.jpg" class="image-responsive" data-width='1920' data-height='549' style="display:none"/>			<img src="http://whiteacorn.com/data/asia2020/banners/asia2020-2/Images/pict-4.jpg" class="image-responsive" data-width='1920' data-height='549' style="display:none"/>			<img src="http://whiteacorn.com/data/asia2020/banners/asia2020-2/Images/pict-5.jpg" class="image-responsive" data-width='1920' data-height='549' style="display:none"/>			<img src="http://whiteacorn.com/data/asia2020/banners/asia2020-2/Images/pict-6.jpg" class="image-responsive" data-width='1920' data-height='549' style="display:none"/>			<img src="http://whiteacorn.com/data/asia2020/banners/asia2020-2/Images/pict-7.jpg" class="image-responsive" data-width='1920' data-height='549' style="display:none"/>			<img src="http://whiteacorn.com/data/asia2020/banners/asia2020-2/Images/pict-8.jpg" class="image-responsive" data-width='1920' data-height='549' style="display:none"/>			<img src="http://whiteacorn.com/data/asia2020/banners/asia2020-2/Images/pict-9.jpg" class="image-responsive" data-width='1920' data-height='549' style="display:none"/>
+			</div>		
+		
+	<section id="intro">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12 col-xs-12">
+				<div class="text-center xcol-12 horizontal-bar top-bar">
+					<h3>About This Site</h3>
+				</div>
+				<div class="intro-item">
+					<div>
+	<p>This website records the overlanding and other travels of Nina and Rob Blackwell and covers a period from March 2009 to the present. The images above are just a taste of the photographic record of our travels. <a href="/photos">Click here</a> to see all of our travel photos.</p>
+	<p>Most of the travel recorded here has been vehicle based, and undertaken as <strong>overlanding</strong> adventures. Over the years we have had a number of vehicles and we have grouped our travels into <strong>Adventures</strong> based on the vehicle used.</p>
+	<p>Below you will find a summary of each of the different adventures and links to detailed pages about those adventures.</p>
+	<p><a href="/map">Clicking here</a> will take you to a consolidated map of all out adventures. Each marker on the map represents a 'camping' spot where we spent at least one night, and the different adventures are represented by different colors.</p>
+	<p>Finally we hope and plan that the adventures are not yet over.</p>
+	<p>Hence when we are exgaged in yet another adventure the section below entitled <strong>The Latest News</strong> will have summaries of the latest posts from which readers can link to the current adventure and all posts related to that adventure.</p>
+</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</section>
+
+<section id="main-content">
+	<div class="container">
+		<div class="row adventures xno-gutter equal">
+			<div id="adv-column" class="col-md-4 col-sm-12">
+								<div class="text-center horizontal-bar top-bar">
+					<h3>Our Adventures</h3>
+				</div>
+									<div class="adv-item-wrap clearfix">
+						
+<div class="adv-item adv-wov-asia2020" >
+	<div>
+		<h2>Asia 2020</h2>
+	</div>
+	<img class="adv-map" src="/skins/site/image-prep/asia2020/singapore.jpg" style="max-height:120px;">
+	<p>Now that 2019 has arrived we feel at liberty to announce that our next adventure will take place in Australia 
+	<a href="/home/asia2020">..... click to see more.</a></p>
+</div>
+					</div>
+									<div class="adv-item-wrap clearfix">
+						
+<div class="adv-item adv-wov-antarctica" >
+	<div>
+		<h2>Antarctica</h2>
+	</div>
+	<img class="adv-map" src="/skins/site/image-prep/antarctica/emperor-penguin.png" style="max-height:120px;">
+	<p>We will end 2019 with a cruise to the Antarctic
+		aboard the <a href="https://www.auroraexpeditions.com.au/ship/greg-mortimer">Greg Mortimer</a>.
+		This is a new ship, having just completed its maiden voyage and is named after a famous (in Australia at least) mountaineer and antarctic traveler.
+	<a href="/home/antarctica">..... click to see more.</a></p>
+</div>
+
+					</div>
+									<div class="adv-item-wrap clearfix">
+						
+<div class="adv-item adv-australia" >
+	<div>
+		<h2>Australia</h2>
+	</div>
+	<img class="adv-map" src="/skins/site/image-prep/australia-final.png" style="max-height:120px;">
+	<p>Now that 2019 has arrived we feel at liberty to announce that our next adventure will take place in Australia 
+	<a href="/home/aust">..... click to see more.</a></p>
+</div>
+					</div>
+									<div class="adv-item-wrap clearfix">
+						
+<div class="adv-item adv-theamericas clearfix">
+	<div>
+		<h2>The Americas</h2>
+	</div>
+	<img class="adv-map" src="/skins/site/image-prep/north-south-america2.png" style="max-width:120px;">
+	<!-- <div class="col-12"> -->
+		<!-- <h2>The Americas</h2> -->
+	<!-- </div> -->
+	<p>This is the earliest adventure recorded on this website and started in March of 2009. At the time we were novices at this <strong>overlanding</strong> thing and really had no idea what we were getting ourselves into. As it turned out
+	.... <a href="/home/theamericas"> read more </a></p>
+</div>
+					</div>
+									<div class="adv-item-wrap clearfix">
+						<div class="adv-item adventure-rtw">
+	<div>
+		<h2>Around the World</h2>
+	</div>
+	<img  class="adv-map" src="/skins/site/image-prep/map-world-307405-2.png" style="max-width:190px;">
+	<p>Our longest overlanding adventure occupying approximately 5 years and taking us around the world from the far East of Canada, across North America, the Pacific Ocean to Eastern Russia, then through the Asian continent to explore Europe and then finally 
+		.... <a href="/home/rtw">read more </a></p>
+	</div>
+
+					</div>
+									<div class="adv-item-wrap clearfix">
+						<div class="adv-item">
+	<div>
+		<h2>Travels with our Earthroamer</h2>
+	</div>
+	<a class="map-link" href="/home/er">
+	<img  class="adv-map" src="/skins/site/image-prep/north-america-v2.png" style="max-width:120px;">
+	</a>
+	<p>After completing our <strong>The Americas</strong> adventure we mistakenly believed that we would not undertake any more vehicle based travel outside North America and with that mind set, in 2011 just after OverlandExpo, we purchased a used 2008 Earthroamer. However as plans  
+
+	.... <a href="/home/er">read more</a></p>
+</div>
+
+					</div>
+									<div class="adv-item-wrap clearfix">
+						
+<div class="adv-item adventure-bmw11">
+	<div>
+		<h2>Motorcycle Adventures</h2>
+	</div>
+	<img  class="adv-map" src="/skins/site/image-prep/bmw-yellow-final.png" style="max-width:120px;">
+	<p>In 2015 on our annual return to the US, I Robert,  decided to get myself a motorcycle license (my first ever experiences with motos) and a year later (again on our annual return to the US) I bought my first motorcycle a 2011 BMW1200 GS. That same year that motorcycle presented me with a broken leg and thats why we did not return to Europe that year.
+	It was probably inevitable
+	.... <a href="/home/bmw11"> click this link to read more.</a></p>
+</div>
+					</div>
+				
+			</div>
+			<div id="latest-column" class="col-md-8 col-sm-12">
+				<div class="text-center xcol-12 horizontal-bar">
+					<h3>The Latest News</h3>
+				</div>
+				<div id="item-wrap" class="ckearfix" xstyle="background-color:yellow;">
+					
+		<!-- render_entry-->
+		<div class='item-summary clearfix'>
+			<div class='entry clearfix'>
+				<div class="header">
+					<h3>Mission aborted (Kuala Lumpur, Malaysia)</h3>
+						<span>
+							Journal entry for Sunday 15th Mar, 2020 
+							(day 10, miles 0)
+						</span>
+				</div>
+				<div class="body clearfix">
+					<img src="/data/asia2020/content/200315/Thumbnails/pict-001.jpg">
+					<p>According to our original plan for this venture today we should have flown to Hanoi in Vietman. But a couple of days ago we were informed that Vietman has temporarily cancelled all tourist visas. This was followed by the news that Oman (a country that was also on our itinerary) had taken the same action. In the face of these developments and the likelihood that other countries would follow suit we have decided to return home and attempt this trip again when the world is no longer racked by a health crisis. We fly back to Seattle tomorrow.</p>
+					<a href=/posts/asia2020/200315? class='item-link'>&nbsp;...click/tap to read the full post</a>
+				</div>
+			</div>
+		</div>
+		
+		<!-- render_entry-->
+		<div class='item-summary clearfix'>
+			<div class='entry clearfix'>
+				<div class="header">
+					<h3>Petronas (Kuala Lumpur, Malaysia)</h3>
+						<span>
+							Journal entry for Saturday 14th Mar, 2020 
+							(day 9, miles 0)
+						</span>
+				</div>
+				<div class="body clearfix">
+					<img src="/data/asia2020/content/200314/Thumbnails/pict-001.jpg">
+					<p>Today started with a visit to the nearby Petronas Twin Towers with their destinctive 
+		double-decker connecting bridge at the 42nd and 43rd floors. The towers are named after 
+		Petronas Gas Berhad, Malaysia's national petroleum company which occupies one of th towers as its head quarters. For those into F1 motor racing Petronas is one of the major sponsors of
+		the Mercedes F1 team and this is reflected by the display of F1 racing cars in the foyer of the building. The visit to the towers, which included time seeing the bridge at the 42nd floor,
+		the observation desck at the 85 floor and the souvenir shop at the 83 floor gave a great view of the greater KL area. 
+		</p>
+					<a href=/posts/asia2020/200314? class='item-link'>&nbsp;...click/tap to read the full post</a>
+				</div>
+			</div>
+		</div>
+		
+		<!-- render_entry-->
+		<div class='item-summary clearfix'>
+			<div class='entry clearfix'>
+				<div class="header">
+					<h3>Birds and butterflies (Kuala Lumpur, Malaysia)</h3>
+						<span>
+							Journal entry for Friday 13th Mar, 2020 
+							(day 8, miles 0)
+						</span>
+				</div>
+				<div class="body clearfix">
+					<img src="/data/asia2020/content/200313/Thumbnails/pict-001.jpg">
+					<p>We planned today, our first full day in KL, to be a somewhat relaxed day with only a couple of sightseeing destinations. First up was a small tropical garden garden park that is completely enclosed by netting in order that its population of butterflies cannot either depart of be attacked by the local bird or monkey population. Interestingly this small facility is located in the heart of this major city. Simlarly our second destination, the KL Bird Park, is located in the heart of the city and is also partially enclosed by netting with different areas of the 
+		park connected by bird-proof double doors. Since birds and butterflies are mainly visual attractions I will let todays photo collection tell the remainder of the story.</p>
+					<a href=/posts/asia2020/200313? class='item-link'>&nbsp;...click/tap to read the full post</a>
+				</div>
+			</div>
+		</div>
+		
+		<!-- render_entry-->
+		<div class='item-summary clearfix'>
+			<div class='entry clearfix'>
+				<div class="header">
+					<h3>Golden lady (Kuala Lumpur, Malaysia)</h3>
+						<span>
+							Journal entry for Thursday 12th Mar, 2020 
+							(day 7, miles 0)
+						</span>
+				</div>
+				<div class="body clearfix">
+					<img src="/data/asia2020/content/200312/Thumbnails/pict-001.jpg">
+					<p>Melacca (Melaka) was a trading center from as early as 1403 when the town was founded by Parameswara (the King of Singapura) and first visited by a Chinese trade envoy. For the next 100 years or so the port of Malacca propspered as a trading hub for Asian trade. The Portuguese arrived in 1511 conquering the city, disrupting the ports central role in Asian trade and thwarting their own ambition. Over the next 100+ years the Dutch tried on a number of occassions to take the port from the Portuguese finally succeeding in Janurary 14th 1641.
+		In 1824 the Dutch ceeded Malacca to the British in exchange for Bencoolen on Samartra. </p>
+					<a href=/posts/asia2020/200312? class='item-link'>&nbsp;...click/tap to read the full post</a>
+				</div>
+			</div>
+		</div>
+		
+		<!-- render_entry-->
+		<div class='item-summary clearfix'>
+			<div class='entry clearfix'>
+				<div class="header">
+					<h3>Road signs, cows and unbrellas (Melaka, Malaysia)</h3>
+						<span>
+							Journal entry for Wednesday 11th Mar, 2020 
+							(day 6, miles 0)
+						</span>
+				</div>
+				<div class="body clearfix">
+					<img src="/data/asia2020/content/200311/Thumbnails/pict-001.jpg">
+					<p>This morrning we set off by car to Malacca (Melaka in the local Malay language) a city about half way between Singapore and Kuala Lumpur. At the start of this journey we passed through the border checkpoints that mark the transition between the two countries. We had anticipated that the checkpoint buildings would be large but the reality exceeded our expectation. Two massive building complexes like super large shopping malls marked first the Singapore side and then the Malaysian side. We were also suprised to see that both complexes made extensive provisions for motorcycles, with dedicated lanes and dedicated checkpoint booths. Our driver explaiend this to us by noting that many people live in Malaysia and travel into Singapore every day for work (I guess that is how Singapore gets a supply of low cost labor) and that each morning approximately 40,000 mototcycles cross from Malaysia to Singapore and the same 40,000 reverse the trip in the afternoon.</p>
+					<a href=/posts/asia2020/200311? class='item-link'>&nbsp;...click/tap to read the full post</a>
+				</div>
+			</div>
+		</div>
+						</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+	
+			<footer id="footer" class="container clearfix">
+			<div class="credits clearfix row">
+				<div>Copyright whiteacorn.com 2012 </div>
+				<div>Brendon Blackwell and Robert Blackwell</div>
+				<div>V7.0.6-12-g3448fbca(master)</div>
+			</div>
+		</footer>
+	
+</body>
+</html>

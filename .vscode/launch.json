@@ -11,7 +11,7 @@
             "request": "launch",
             "program": "${workspaceFolder}/runner.py",
             "cwd":"${workspaceFolder}/project_pig",
-            "args":["--config-file", "${workspaceFolder}/project_pig/smpl.json", "--log-actions", "download", "openssl"],
+            "args":["--config-file", "${workspaceFolder}/project_pig/smpl.json", "--log-actions", "all", "openssl"],
             "console": "integratedTerminal"
         },
         {
@@ -20,6 +20,36 @@
             "request": "launch",
             "program": "${workspaceFolder}/tests/test_object.py",
             "cwd":"${workspaceFolder}/tests",
+            "env":{"PYHTONPATH":"${workspaceFolder}/smpl:${workspaceFolder}:${PYTHONPATH}"},
+            "args":[],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "test_logger",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/tests/test_logger.py",
+            "cwd":"${workspaceFolder}/tests",
+            "env":{"PYHTONPATH":"${workspaceFolder}/smpl:${workspaceFolder}:${PYTHONPATH}"},
+            "args":[],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "run_exec",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/smpl/exec.py",
+            "cwd":"${workspaceFolder}/tests/test_exec",
+            "env":{"PYHTONPATH":"${workspaceFolder}/smpl:${workspaceFolder}:${PYTHONPATH}"},
+            "args":[],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "test_exec",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/tests/test_exec.py",
+            "cwd":"${workspaceFolder}/tests/test_exec",
             "env":{"PYHTONPATH":"${workspaceFolder}/smpl:${workspaceFolder}:${PYTHONPATH}"},
             "args":[],
             "console": "integratedTerminal"

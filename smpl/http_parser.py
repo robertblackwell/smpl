@@ -1,5 +1,6 @@
 import os
 
+import smpl.log_module as logger
 from smpl.package import SourcePackage
 from smpl.config_file import ConfigObject, PackageParms
 package_name = "http_parser"
@@ -15,11 +16,14 @@ class HttpParser(SourcePackage):
         self.package_clone_dir_path = os.path.join(self.cfg_obj.clone_dir, "http-parser")
 
     def get_package(self):
+        logger.debugln("class: {} package name {} ".format(type(self).__name__, self.name))
         self.get_git_repo(self.git_url, "http-parser")
 
     def stage_package(self):
+        logger.debugln("class: {} package name {} ".format(type(self).__name__, self.name))
         self.stage_source("http-parser", "http-parser")
 
     def install_package(self):
+        logger.debugln("class: {} package name {} ".format(type(self).__name__, self.name))
         self.install_stage_to_project("http-parser", "http-parser")
 

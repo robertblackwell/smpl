@@ -1,4 +1,6 @@
 import os
+import smpl.util as util
+import smpl.log_module as logger
 from smpl.config_file import ConfigObject, PackageParms
 
 from .package import HeadersOnlyPackage
@@ -6,6 +8,7 @@ from .package import HeadersOnlyPackage
 
 class Doctest(HeadersOnlyPackage):
     def __init__(self, name: str, parms: PackageParms, cfg_obj: ConfigObject):
+        logger.debugln("class: {} package name {} ".format(type(self).__name__, name));
         super().__init__(name, cfg_obj)
         self.name = name
         # the name of the directory that the cloned repo will unpack into
@@ -20,10 +23,13 @@ class Doctest(HeadersOnlyPackage):
         self.cp_from_here_dir = os.path.join(self.package_clone_dir_path, "doctest")
 
     def get_package(self):
+        logger.debugln("class: {} package name {} ".format(type(self).__name__, self.name));
         self.get_git_repo(self.git_url, "doctest", self.git_branch_arg)
 
     def stage_package(self):
+        logger.debugln("class: {} package name {} ".format(type(self).__name__, self.name));
         self.stage_headers_only_from_repo(repo_name="doctest", stage_name="doctest", repo_sub_directory="doctest")
 
     def install_package(self):
+        logger.debugln("class: {} package name {} ".format(type(self).__name__, self.name));
         self.headers_from_stage_to_vendor("doctest", "doctest")

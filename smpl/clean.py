@@ -1,6 +1,7 @@
 import os
 import smpl.util as util
 import smpl.config_file as cfg
+import smpl.log_module as logger
 
 
 def clean_install_dirs(cfg_obj: cfg.ConfigObject) -> None:

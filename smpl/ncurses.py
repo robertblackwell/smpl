@@ -1,7 +1,9 @@
 import os
 import smpl.util as util
+import smpl.log_module as logger
 from smpl.package import LibraryPackage
 from smpl.config_file import ConfigObject, PackageParms
+import smpl.exec as exec
 
 supported_versions = {
     "6.2": {
@@ -36,7 +38,7 @@ class NCurses(LibraryPackage):
         self.get_and_unpack_tar(self.package_url, self.targz, self.repo_name)
 
     def stage_package(self):
-        util.logger.writeln("NCurses stage_package begin")
+        logger.writeln("NCurses stage_package begin")
         util.mkdir_p(self.stage_include_dir_path)
 
         # make sure stage/include/boost exists and is empty
@@ -45,12 +47,12 @@ class NCurses(LibraryPackage):
 
         util.mkdir_p(self.stage_lib_dir_path)
 
-        util.run(["rm", "-rf", "{}/libncurses*".format(self.stage_lib_dir_path)])
-        util.run(["rm", "-rf", "{}/libform*".format(self.stage_lib_dir_path)])
-        util.run(["rm", "-rf", "{}/libmenu*".format(self.stage_lib_dir_path)])
-        util.run(["rm", "-rf", "{}/libform*".format(self.stage_lib_dir_path)])
+        exec.run(["rm", "-rf", "{}/libncurses*".format(self.stage_lib_dir_path)])
+        exec.run(["rm", "-rf", "{}/libform*".format(self.stage_lib_dir_path)])
+        exec.run(["rm", "-rf", "{}/libmenu*".format(self.stage_lib_dir_path)])
+        exec.run(["rm", "-rf", "{}/libform*".format(self.stage_lib_dir_path)])
 
-        util.run([
+        exec.run([
             "./configure",
             "--prefix={}".format(self.cfg_obj.vendor_dir),
             "--enable-sigwinch",
@@ -58,20 +60,20 @@ class NCurses(LibraryPackage):
             "--with-pthread",
             "--with-debug"
         ], self.clone_dir_path)
-        util.run(
+        exec.run(
             ['make'], self.clone_dir_path
         )
 
-        # util.run([
+        # exec.run([
         #     "make",
         #     "install"
         # ], self.clone_dir_path
         # )
 
-        util.logger.writeln("NCurses stage_package end")
+        logger.writeln("NCurses stage_package end")
 
     def install_package(self):
-        util.run([
+        exec.run([
             "make",
             "install"
         ], self.clone_dir_path

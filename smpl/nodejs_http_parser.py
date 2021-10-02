@@ -1,6 +1,7 @@
 import os
 from smpl.package import SourcePackage
 from smpl.config_file import ConfigObject, PackageParms
+import smpl.log_module as logger
 
 class NodeJsHttpParser(SourcePackage):
     def __init__(self, name: str, parms: PackageParms, cfg_obj: ConfigObject):

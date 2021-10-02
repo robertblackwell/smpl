@@ -1,9 +1,11 @@
 import os
 import smpl.util as util
+import smpl.log_module as logger
 import platform
 import re
 from smpl.package import LibraryPackage
 from smpl.config_file import ConfigObject, PackageParms
+import smpl.exec as exec
 
 package_name = "openssl"
 openssl_name = "openssl-1.1.1f"
@@ -13,9 +15,9 @@ package_url = "https://www.openssl.org/source/{}.tar.gz".format(openssl_name)
 package_targz_file = "{}.tar.gz".format(openssl_name)
 # package_targz_file = "tar xvzf {}.tar.gz".format(openssl_name)
 
-
 class OpenSSL(LibraryPackage):
     def __init__(self, name, parms: PackageParms, cfg_obj: ConfigObject):
+        logger.debugln("class: {} package name {} ".format(type(self).__name__, name));
         super().__init__(package_name, cfg_obj)
         self.name = name
         self.parms = parms
@@ -29,9 +31,11 @@ class OpenSSL(LibraryPackage):
         self.package_clone_dir_versioned_path = os.path.join(self.cfg_obj.clone_dir, "openssl-1.1.1f")
 
     def get_package(self):
+        logger.debugln("class: {} package name {} ".format(type(self).__name__, self.name));
         self.get_and_unpack_tar(package_url, package_targz_file, openssl_name)
 
     def stage_package(self):
+        logger.debugln("class: {} package name {} ".format(type(self).__name__, self.name));
         util.clear_directory(self.package_stage_include_dir_path)
         util.rm_file("{}/libcrypto.a".format(self.stage_lib_dir_path))
         util.rm_file("{}/libssl.a".format(self.stage_lib_dir_path))
@@ -43,7 +47,7 @@ class OpenSSL(LibraryPackage):
             arch_arg = "darwin64-x86_64-cc"
         else:
             raise RuntimeError("could not determine platform type for openssl build options - platform is: {}".format(sys_desc))
-        util.run(["./Configure",
+        exec.run(["./Configure",
                   "--prefix={}".format(self.cfg_obj.stage_dir),
                   "--openssldir={}".format(self.vendor_ssl_dir),
                   "--debug",
@@ -53,10 +57,11 @@ class OpenSSL(LibraryPackage):
                   ],
                  self.package_clone_dir_versioned_path)
 
-        util.run(["make", "all"], self.package_clone_dir_versioned_path)
-        util.run(["make", "install"], self.package_clone_dir_versioned_path)
+        exec.run(["make", "all"], self.package_clone_dir_versioned_path)
+        exec.run(["make", "install"], self.package_clone_dir_versioned_path)
 
     def install_package(self):
+        logger.debugln("class: {} package name {} ".format(type(self).__name__, self.name));
         self.headers_from_stage_to_vendor("openssl", "openssl")
         self.libs_from_stage_to_vendor("libssl.*")
         self.libs_from_stage_to_vendor("libcrypto.*")

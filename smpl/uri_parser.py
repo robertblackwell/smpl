@@ -1,6 +1,7 @@
 import os
 from smpl.package import SourcePackage
 from smpl.config_file import ConfigObject, PackageParms
+import smpl.log_module as logger
 
 class UriParser(SourcePackage):
 	def __init__(self, name, parms: PackageParms, cfg_obj: ConfigObject):
@@ -16,10 +17,13 @@ class UriParser(SourcePackage):
 		self.package_stage_source_path = os.path.join(self.package_stage_external_src_dir_path, self.package_stage_include_dir_path)
 
 	def get_package(self):
+		logger.debugln("class: {} package name {} ".format(type(self).__name__, self.name))
 		self.get_git_repo(self.git_url, "urlparser")
 	
 	def stage_package(self):
+		logger.debugln("class: {} package name {} ".format(type(self).__name__, self.name))
 		self.stage_source("urlparser", "urlparser")
 
 	def install_package(self):
+		logger.debugln("class: {} package name {} ".format(type(self).__name__, self.name))
 		self.install_stage_to_project("urlparser" , "uri-parser")

@@ -38,7 +38,7 @@ def stream_it(thing):
         sys.stdout.write(line)
 
 def popen_exec(cmd: List[str]):
-    output: string = ""
+    output: str = ""
     try:
         result = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stream_it(result.stdout)

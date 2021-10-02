@@ -6,7 +6,9 @@ from typing import Any, List, Union
 
 import yaml
 from types import SimpleNamespace as Namespace
-
+import smpl.util as util
+import smpl.exec as exec
+import smpl.log_module as logger
 from smpl.boost import Boost
 from smpl.openssl import OpenSSL
 from smpl.cert_lib import CertLib
@@ -56,6 +58,7 @@ def package_handler(name: str, parms: Any, cfg_obj: configuration.ConfigObject) 
 
 
 def dispatch_all(subcmd, cfg_obj):
+    logger.debugln("package_name: {} subcmd: {}".format("all", subcmd))
     if subcmd == "clean":
         clean.clean_install_dirs(cfg_obj)
     else:
@@ -64,6 +67,7 @@ def dispatch_all(subcmd, cfg_obj):
             dispatch_package(pkg, subcmd, parms, cfg_obj)
 
 def dispatch_package(package_name: str, subcmd: str, parms: Any, cfg_obj: configuration.ConfigObject) -> None:
+    logger.debugln("package_name: {} subcmd: {}".format(package_name, subcmd))
     h = package_handler(package_name, parms, cfg_obj)
     if subcmd == "all":
         h.get_package()

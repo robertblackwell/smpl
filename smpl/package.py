@@ -6,6 +6,7 @@ import os
 from typing import Union, List, NamedTuple
 
 import smpl.util as util
+import smpl.log_module as logger
 import smpl.config_file as cfg
 
 
@@ -35,6 +36,7 @@ import smpl.config_file as cfg
 # """
 class PackageBase(object):
     def __init__(self, package_name, cfg_obj: cfg.ConfigObject):
+        logger.debugln("class: {} package name {} ".format("PackageBase", package_name));
         self.parms = cfg_obj.package_parms(package_name)
         if not hasattr(self.parms, 'version'):
             raise ValueError("package name {} does not specify a version ".format(package_name))
@@ -68,6 +70,7 @@ class PackageBase(object):
         util.mkdir_p(self.vendor_lib_dir_path)
 
     def list_package(self) -> str:
+        logger.debugln("class: {} package name {} ".format("PackageBase", self.package_name));
         return "{:21} release: {:11} version: {:11}  url: {}".format(
             self.package_name[0:19],
             self.release[0:9] if self.release is not None else "",
@@ -84,17 +87,20 @@ class PackageBase(object):
     # branch_argument: allows the cloning of a spcecific branch or tag.
     # """
     def get_git_repo(self, repo_url: str, repo_name: str, branch_argument=None):
+        logger.debugln("class: {} package name {} ".format("PackageBase", self.package_name));
         package_clone_dir = os.path.join(self.cfg_obj.clone_dir, repo_name)
         util.rm_directory(package_clone_dir)
         util.git_clone(self.git_url, self.cfg_obj.clone_dir, branch_argument)
         util.list_directory(package_clone_dir)
 
     def get_and_unpack_tar(self, tar_url, tar_file_name, tar_unpacked_name):
+        logger.debugln("class: {} package name {} ".format("PackageBase", self.package_name));
         package_clone_dir = os.path.join(self.cfg_obj.clone_dir, tar_unpacked_name)
         util.rm_directory(package_clone_dir)
         tar_file_path = os.path.join(self.cfg_obj.clone_dir, tar_file_name)
         util.rm_file(tar_file_path)
-        util.run(["wget", "-O", tar_file_path, tar_url])
+        # exec.run(["wget", "-O", tar_file_path, tar_url])
+        util.wget(tar_url, tar_file_path)
         util.unpack_tar_gz(tar_file_path, self.cfg_obj.clone_dir)
         util.list_directory(self.cfg_obj.clone_dir)
         # why would you do this ?
@@ -105,6 +111,7 @@ class PackageBase(object):
         Empties vendor/include/vendor_name and then
         Copies header files from stage/include/stage_name to vendor/include/vendor_name
         """
+        logger.debugln("class: {} package name {} ".format("PackageBase", self.package_name));
         from_dir = os.path.join(self.stage_include_dir_path, stage_name)
         to_dir = os.path.join(self.vendor_include_dir_path, vendor_name)
         util.clear_directory(to_dir)
@@ -116,6 +123,7 @@ class PackageBase(object):
         and then
         copies lib files matching lib_patterm from from stage/lib to vendor/lib
         """
+        logger.debugln("class: {} package name {} ".format("PackageBase", self.package_name));
         from_dir = self.stage_lib_dir_path
         to_dir = self.vendor_lib_dir_path
         util.rm_directory_contents(to_dir, lib_pattern)
@@ -174,6 +182,7 @@ class PackageBase(object):
 class LibraryPackage(PackageBase):
 
     def __init__(self, package_name, cfg_obj: cfg.ConfigObject):
+        logger.debugln("class: {} package name {} ".format("LibraryPackage", package_name));
         super().__init__(package_name, cfg_obj)
 
 
@@ -206,9 +215,9 @@ class HeadersOnlyPackage(PackageBase):
     """
 
     def __init__(self, package_name, cfg_obj: cfg.ConfigObject):
+        logger.debugln("class: {} package name {} ".format("HeaderOnlyPackage", package_name));
         super().__init__(package_name, cfg_obj)
 
-    # print("HeaderOnlyPackage")
 
     # """
     # copy the header files for a headers only package from their location in the clone
@@ -221,6 +230,7 @@ class HeadersOnlyPackage(PackageBase):
     #
     # """
     def stage_headers_only_from_repo(self, repo_name, stage_name, repo_sub_directory=None):
+        logger.debugln("class: {} package name {} ".format("PackageBase", self.package_name));
         to_dir = os.path.join(self.stage_include_dir_path, stage_name)
         if repo_sub_directory is None:
             from_dir = os.path.join(self.cfg_obj.clone_dir, repo_name)
@@ -262,8 +272,8 @@ class HeadersOnlyPackage(PackageBase):
 # """
 class SourcePackage(PackageBase):
     def __init__(self, package_name, cfg_obj: cfg.ConfigObject):
+        logger.debugln("class: {} package name {} ".format("SourcePackage", package_name));
         super().__init__(package_name, cfg_obj)
-        # print("SourcePackage")
         self.stage_external_src_dir_path = os.path.join(self.cfg_obj.stage_dir, "external_src")
         self.package_stage_external_src_dir_path = os.path.join(self.stage_external_src_dir_path, self.package_name)
         self.package_external_src_dir_path = os.path.join(self.cfg_obj.source_dir, "external_src", self.package_name)
@@ -280,6 +290,7 @@ class SourcePackage(PackageBase):
     #
     def stage_source(self, repo_name, stage_name, repo_sub_directory=None, clear_to_dir=True):
 
+        logger.debugln("class: {} package name {} ".format("PackageBase", self.package_name));
         to_dir = os.path.join(self.stage_external_src_dir_path, stage_name)
         if repo_sub_directory is None:
             from_dir = os.path.join(self.cfg_obj.clone_dir, repo_name)
@@ -298,6 +309,7 @@ class SourcePackage(PackageBase):
         and then
         Copies header+source files from stage/external/stage_name to project_sourcer/external_src/source_name
         """
+        logger.debugln("class: {} package name {} ".format("PackageBase", self.package_name));
         from_dir = os.path.join(self.stage_external_src_dir_path, stage_name)
         to_dir = os.path.join(self.project_external_src_dir_path, source_name)
         print("SourcePackage package: {} from_dir {} to_dir {} "
